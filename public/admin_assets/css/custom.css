@@ -1,0 +1,66 @@
+.w-4 {
+  width: 1rem;
+}
+.h-4 {
+  height: 1rem;
+}
+
+.w-6 {
+  width: 1.5rem;
+}
+.h-6 {
+  height: 1.5rem;
+}
+
+.dropzone {
+  background: white;
+  border-radius: 5px;
+  border: 2px dashed rgb(0, 135, 247);
+  border-image: none;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+input[type="file"] {
+  display: block;
+}
+
+#imagepreview1{
+  
+    height:120px;
+    width:140px;
+}
+#cancel {
+    
+  width: 40px;
+  height: 40px;
+  position: relative;
+  top: -140px;
+  background-color: #d5d6da;
+  margin-left: 120px;
+  cursor: pointer;
+}
+
+#cancel:before, #cancel:after {
+  content: '';
+  width: 110%;
+  height: 3px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: white;
+}
+
+#cancel:before {
+  -webkit-transform: translate(-50%,-50%) rotate(45deg);
+  transform: translate(-50%,-50%) rotate(45deg);
+}
+
+#cancel:after {
+  -webkit-transform: translate(-50%,-50%) rotate(-45deg);
+  transform: translate(-50%,-50%) rotate(-45deg);
+}
+.swal-height {
+  height: 300px;
+}

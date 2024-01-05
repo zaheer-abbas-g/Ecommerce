@@ -71,9 +71,9 @@ class SubCategoryController extends Controller
 
     public function edit($id)
     {
-        $SubCategory = SubCategory::find($id);
-        $categories =  Category::get();
-        return response()->json(['categories'=>$categories,'subcategory' => $SubCategory]);
+        $SubCategory = SubCategory::with('Categories')->where('id',$id)->get();
+       // $categories =  Category::get();
+        return response()->json($SubCategory);
     }
 
     public function destroy($id)

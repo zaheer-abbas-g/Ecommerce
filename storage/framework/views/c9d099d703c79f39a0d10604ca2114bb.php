@@ -1,7 +1,4 @@
-@extends('admin.layouts.master')
-
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 
 
 
@@ -12,9 +9,7 @@
                 <div class="col-sm-6">
                     <h1>Sub Category</h1>
                 </div>
-                {{-- <div class="col-sm-6 text-right">
-                    <a href="{{url('admin/create-subcategory')}}" class="btn btn-primary">New Sub Category</a>
-                </div> --}}
+                
 <!-- Button trigger modal -->
                 <div class="col-sm-6 text-right">
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
@@ -142,7 +137,7 @@
 
             var formData = new FormData($('#subCategory')[0]);
                 $.ajax({
-                    url:"{{url('admin/sub-category')}}",
+                    url:"<?php echo e(url('admin/sub-category')); ?>",
                     type:"post",
                     data:formData,
                     dataType:"json",
@@ -159,7 +154,7 @@
 
             function show_category(){
                 $.ajax({
-                    url:"{{url('admin/show-category')}}",
+                    url:"<?php echo e(url('admin/show-category')); ?>",
                     type:"get",
                     dataType:"json",
                     success:function(response){
@@ -179,7 +174,7 @@
            $('#name').on('change',function(){
                var value_slug = $('#name').val();
                 $.ajax({
-                    url:"{{route('sub.slug')}}",
+                    url:"<?php echo e(route('sub.slug')); ?>",
                     type:"get",
                     data: {
                         sub_category:value_slug
@@ -200,7 +195,7 @@
         var table = $('.data-table').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ route('users.index') }}",
+            ajax: "<?php echo e(route('users.index')); ?>",
             columns: [
                 {data: 'DT_RowIndex', name: 'DT_RowIndex'},
                 {data: 'name', name: 'name'},
@@ -217,7 +212,7 @@
                 var category_id = $(this).data('id');
                 $.ajax({
                     type:"get",
-                    url:"{{url('/admin/category-sub-edit')}}"+"/"+category_id,
+                    url:"<?php echo e(url('/admin/category-sub-edit')); ?>"+"/"+category_id,
                     dataType:"json",
                     success:function(response){
                         console.log(response);
@@ -249,7 +244,7 @@ $('#select_category').val(value.category_id).trigger("change");
                 var category_id = $(this).data('id');
                 $.ajax({
                     type:"get",
-                    url:"{{url('/admin/category-sub-delete')}}"+"/"+category_id,
+                    url:"<?php echo e(url('/admin/category-sub-delete')); ?>"+"/"+category_id,
                     dataType:"json",
                     success:function(response){
                         // console.log(response);
@@ -264,11 +259,13 @@ $('#select_category').val(value.category_id).trigger("change");
     </script>
 
 
-@endsection
+<?php $__env->stopSection(); ?>
 
 
-@section('title')
+<?php $__env->startSection('title'); ?>
     sub category
-@endsection
+<?php $__env->stopSection(); ?>
 
 
+
+<?php echo $__env->make('admin.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\htdocs\YahooEcommerce\Ecommerce\resources\views/admin/subcategory.blade.php ENDPATH**/ ?>

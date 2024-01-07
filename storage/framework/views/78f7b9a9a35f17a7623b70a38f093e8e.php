@@ -1,6 +1,3 @@
-
-
-
 <?php $__env->startSection('content'); ?>
 
 
@@ -34,6 +31,7 @@
             <form action="" id="subCategory">					
                     <div class="row">
                         <div class="col-md-12">
+                            <input type="hidden" id="sub_category_id" name="sub_category_id">
                             <div class="mb-3">
                                 <label for="name">Category</label>
                                 <select name="select_category" id="select_category" class="form-control">
@@ -102,15 +100,6 @@
                         </tbody>
                     </table>									
                 </div>
-                <div class="card-footer clearfix">
-                    <ul class="pagination pagination m-0 float-right">
-                      <li class="page-item"><a class="page-link" href="#">«</a></li>
-                      <li class="page-item"><a class="page-link" href="#">1</a></li>
-                      <li class="page-item"><a class="page-link" href="#">2</a></li>
-                      <li class="page-item"><a class="page-link" href="#">3</a></li>
-                      <li class="page-item"><a class="page-link" href="#">»</a></li>
-                    </ul>
-                </div>
             </div>
         </div>
         <!-- /.card -->
@@ -122,14 +111,21 @@
 
 
             //// show category function call //////
+            $("#exampleModalLong").on('hidden.bs.modal', function () {
+                $('#select_category').val("").trigger("change");    
+                $('#exampleModalLongTitle').html('Create sub category');
+                $('#subbtn').html('Save');
+                $('#name').val('');
+                $('#slug').val('');
+                $('#status').val('');
+            });
+
             show_category();
 
             $.ajaxSetup({
                 headers:
                 { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
             });
-
-
 
            $("#subCategory").on("submit",function(e){
             e.preventDefault();
@@ -144,6 +140,15 @@
                     contentType: false,
                     cache: false,
                     success:function(response){
+                        console.log(response);
+                    Swal.fire({
+                            position: "top-end",
+                            icon: "success",
+                            title: response.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                    });
+
                         $('#exampleModalLong').modal('hide');
                         table.draw();
                     },
@@ -166,9 +171,7 @@
                     }
                 });
            }
-
-
-           
+  
            /////////// Slug ///////////
            $('#name').on('change',function(){
                var value_slug = $('#name').val();
@@ -204,9 +207,7 @@
                 {data: 'action', name: 'action', orderable: false, searchable: false},
             ]
         });
-      
 
-   
                 $('body').on('click', '.editProduct', function () {
                 var category_id = $(this).data('id');
                 $.ajax({
@@ -214,49 +215,46 @@
                     url:"<?php echo e(url('/admin/category-sub-edit')); ?>"+"/"+category_id,
                     dataType:"json",
                     success:function(response){
-                        // console.log(response);
+                        console.log(response);
+                        $('#sub_category_id').val(category_id);
+                        $('#exampleModalLongTitle').html('Edit sub category');
+                        $('#subbtn').html('Edit');
+
+                    // $('#name').val(response.name);
                         $('#exampleModalLong').modal('show');
-                        var subcategories_id = response.subcategory.category_id
-                        console.log(subcategories_id);
-                        
-                       
-                        $.each(response.categories,function(key,value){
-                            var slected = "selected";
-                            
-                            if(subcategories_id==value.id){
-                                $('#select_category').append(
-                                `<option value="${value.id}" "selected">${value.id}</option>`
-                             );
-                            }
-                           
-                        });
-
-                      
-
+                        $.each(response,function(key,value){
+                        $('#select_category').val(value.category_id).trigger("change");
+                        $('#name').val(value.name);
+                        $('#slug').val(value.slug);
+                        $('#status').val(value.status).trigger('change');
+                    });
                     }
                 });
                 });
 
-
-
-                $('body').on('click', '.deleteProduct', function () {
-                var category_id = $(this).data('id');
-                $.ajax({
-                    type:"get",
-                    url:"<?php echo e(url('/admin/category-sub-delete')); ?>"+"/"+category_id,
-                    dataType:"json",
-                    success:function(response){
-                        // console.log(response);
-                        table.draw();
-                    }
-                });
+                    $('body').on('click', '.deleteProduct', function () {
+                    var category_id = $(this).data('id');
+                    $.ajax({
+                        type:"get",
+                        url:"<?php echo e(url('/admin/category-sub-delete')); ?>"+"/"+category_id,
+                        dataType:"json",
+                        success:function(response){
+                            // console.log(response);
+                            Swal.fire({
+                                    title: "Deleted",
+                                    text: response.message,
+                                    icon: "success",
+                                    timer: 1500,
+                                    customClass: 'swal-height',
+                                    showConfirmButton: false,           
+                                });
+                            table.draw();
+                        }
+                    });
             
                 });
-
-
 }); 
     </script>
-
 
 <?php $__env->stopSection(); ?>
 

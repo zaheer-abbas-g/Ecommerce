@@ -16,19 +16,21 @@ class SubCategoryController extends Controller
   {
     if ($request->ajax()) {
   
-      $data = SubCategory::with('Categories')->latest()->get();
-
-      return DataTables::of($data)
+      $data = SubCategory::with('Categories:id,name')
+                          ->select('id','name','slug','status','category_id')
+                          ->latest()->get();
+          return DataTables::of($data)
               ->addIndexColumn()
               ->addColumn('action', function($row){
 
-                     $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editProduct">Edit</a>';
+                     $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit  btn-sm editProduct"> <i class="fas fa-edit" style="font-size:36px;color:success"></i> </a>';
 
-                     $btn = $btn.' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteProduct">Delete</a>';
+                     $btn = $btn.' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class=" btn-sm deleteProduct"><i class="far fa-trash-alt" style="font-size:36px;color:red"></i></a>';
 
                      return $btn;
               })
               ->addColumn('categories', function($row){    
+                      $category = $row;  
                       $category = $row->categories->name;  
                       return $category;
               })
@@ -45,20 +47,24 @@ class SubCategoryController extends Controller
   }
 
     public function store(Request $request){
-         
-        $subCategory                     = new SubCategory;
-        $subCategory->category_id        =  $request->select_category;
-        $subCategory->slug               =  $request->slug;
-        $subCategory->status             =  $request->status;
-        $subCategory->name               =  $request->name;
-        $subCategory->save();
-
-        return response()->json(['message' => "Sub Category successfully added","data" => $subCategory]);
+        
+       $updateOrCreate = SubCategory::updateOrCreate(
+            [
+                'id' => $request->sub_category_id
+            ],
+            [
+                'category_id' => $request->select_category,
+                'name'=>  $request->name,
+                'slug'  => $request->slug,
+                'status'=> $request->status
+            ]);
+      
+        return response()->json(['message' => "Sub Category successfully added","data" => $updateOrCreate]);
     }
 
     public function showCategory(){
 
-      $category =  Category::get();
+      $category =  Category::select('id','name')->get();
       return response()->json(["category"=> $category]);
     }
 
@@ -66,13 +72,12 @@ class SubCategoryController extends Controller
         $subCategory = $request->sub_category;
 
         $slug = Str::slug($subCategory);
-      return response()->json(['sub'=> $slug]);
+        return response()->json(['sub'=> $slug]);
     }
 
     public function edit($id)
     {
         $SubCategory = SubCategory::with('Categories')->where('id',$id)->get();
-       // $categories =  Category::get();
         return response()->json($SubCategory);
     }
 
@@ -80,6 +85,6 @@ class SubCategoryController extends Controller
     {
         SubCategory::find($id)->delete();
       
-        return response()->json(['success'=>'Product deleted successfully.']);
+        return response()->json(['message'=>'sub category deleted successfully.']);
     }
 }

@@ -1,7 +1,7 @@
-@extends('admin.layouts.master')
 
 
-@section('content')
+
+<?php $__env->startSection('content'); ?>
 	<!-- Content Header (Page header) -->
     <section class="content-header">					
         <div class="container-fluid my-2">
@@ -10,7 +10,7 @@
                     <h1>Brands</h1>
                 </div>
                 <div class="col-sm-6 text-right"> 
-                    {{-- <a href="{{url('admin/brand/create')}}" class="btn btn-primary">New Brand</a> --}}
+                    
                     <a class="btn btn-success" href="javascript:void(0)" id="createNewBrand"> Create Brand </a>
                 </div>
             </div>
@@ -143,7 +143,7 @@
                 
                 var brad_data = new FormData($("#brand-form")[0]);
                 $.ajax({
-                    url:"{{url('admin/brand')}}",
+                    url:"<?php echo e(url('admin/brand')); ?>",
                     type:"post",
                     data:brad_data,
                     dataType:"json", 
@@ -159,11 +159,13 @@
 
     </script>
 
-@endsection
+<?php $__env->stopSection(); ?>
 
 
-@section('title')
+<?php $__env->startSection('title'); ?>
     brands
-@endsection
+<?php $__env->stopSection(); ?>
 
 
+
+<?php echo $__env->make('admin.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\ecomerce\resources\views/admin/brands.blade.php ENDPATH**/ ?>

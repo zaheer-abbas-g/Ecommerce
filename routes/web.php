@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SubCategoryController;
 use Illuminate\Support\Facades\Auth;
@@ -51,9 +52,9 @@ Route::prefix('admin')->middleware(['auth','is_admin'])->group(function(){
     Route::get('/sub-category',function(){
         return view('admin.subcategory');
     });
-    Route::get('/brands',function(){
-        return view('admin.brands');
-    });
+    // Route::get('/brands',function(){
+    //     return view('admin.brands');
+    // });
     Route::get('/products',function(){
         return view('admin.products');
     });
@@ -74,9 +75,9 @@ Route::prefix('admin')->middleware(['auth','is_admin'])->group(function(){
     Route::get('/create-subcategory',function(){
         return view('admin.create_subcategory');
     });
-    Route::get('/create-brands',function(){
-        return view('admin.create_brands');
-    });
+    // Route::get('/create-brands',function(){
+    //     return view('admin.create_brands');
+    // });
     Route::get('/create-products',function(){
         return view('admin.create_products');
     });
@@ -113,6 +114,11 @@ Route::prefix('admin')->middleware(['auth','is_admin'])->group(function(){
 
 
 
+    /////////// Brand //////////////
+
+    Route::get('/brand',[BrandController::class,'index']);
+    Route::get('/brand/create',[BrandController::class,'create']);
+    Route::post('/brand',[BrandController::class,'store']);
 });
 
 

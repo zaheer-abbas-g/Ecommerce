@@ -1,6 +1,6 @@
-@extends('admin.layouts.master')
 
-@section('content')
+
+<?php $__env->startSection('content'); ?>
 	<!-- Content Header (Page header) -->
     <section class="content-header">					
         <div class="container-fluid my-2">
@@ -9,7 +9,7 @@
                     <h1>Create Brand</h1>
                 </div>
                 <div class="col-sm-6 text-right">
-                    <a href="{{url('admin/brand')}}" class="btn btn-primary">Back</a>
+                    <a href="<?php echo e(url('admin/brand')); ?>" class="btn btn-primary">Back</a>
                 </div>
             </div>
         </div>
@@ -45,9 +45,10 @@
         <!-- /.card -->
     </section>
     <!-- /.content -->
-@endsection
+<?php $__env->stopSection(); ?>
 
 
-@section('title')
+<?php $__env->startSection('title'); ?>
     create brands
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('admin.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\ecomerce\resources\views/admin/create_brands.blade.php ENDPATH**/ ?>

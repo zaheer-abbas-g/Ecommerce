@@ -116,9 +116,10 @@ Route::prefix('admin')->middleware(['auth','is_admin'])->group(function(){
 
     /////////// Brand //////////////
 
-    Route::get('/brand',[BrandController::class,'index']);
+    Route::get('/brand',[BrandController::class,'index'])->name('brand.index');
     Route::get('/brand/create',[BrandController::class,'create']);
     Route::post('/brand',[BrandController::class,'store']);
+    Route::get('/brand-slug',[BrandController::class,'slug'])->name('brand.slug');
 });
 
 

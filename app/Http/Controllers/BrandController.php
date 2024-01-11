@@ -21,15 +21,21 @@ class BrandController extends Controller
   
             return Datatables::of($data)
                     ->addIndexColumn()
-                    ->addColumn('action', function($row){
+                    ->addColumn('action', function($d){
    
-                           $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editProduct">Edit</a>';
+                           $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$d->id.'" data-original-title="Edit" class="edit  btn-sm editProduct"><i class="fas fa-edit" style="font-size:36px;color:success"></i> </a>';
    
-                           $btn = $btn.' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteProduct">Delete</a>';
+                           $btn = $btn.' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$d->id.'" data-original-title="Delete" class="btn-sm deleteProduct"><i class="far fa-trash-alt" style="font-size:36px;color:red"></i></a>';
     
                             return $btn;
                     })
-                    ->rawColumns(['action'])
+                    ->addColumn('status',function($data){
+                        // $btn = '<a href="javascript:void(0)"  ><i class="fas fa-edit" style="font-size:36px;color:success"></i> </a>';
+                            // $btn = '<a href="javascript:void(0)"> <span><p class="btn btn-success btn-sm" style="width:80px; height:30px">active</p><span></a>';
+                            $data = ($data->status==1)?'<a href="javascript:void(0)"> <span><p class="btn btn-success btn-sm" style="width:80px; height:30px">active</p><span></a>':'<a href="javascript:void(0)"> <span><p class="btn btn-warning btn-sm" style="width:80px; height:30px">block</p><span></a>';
+                            return $data;
+                    })
+                    ->rawColumns(['action','status'])
                     ->make(true);
         }
         
@@ -51,13 +57,15 @@ class BrandController extends Controller
      */
     public function store(Request $request)
     {
-        // $dd = $request->all();
            $brand = Brand::updateOrCreate(
             [
-                'name' => $request->name,
-                'slug' => $request->name,
-                'status' => $request->name,
-            ]);
+                'id'=> $request->brand_id
+            ],
+             [
+                 'name' => $request->name,
+                 'slug' => $request->slug,
+                 'status' => $request->status,
+             ]);
         return response()->json(['message'=> 'Brand sussessfully added']);
     }
 
@@ -72,9 +80,17 @@ class BrandController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Brand $brand)
+    public function edit($id)
     {
-        //
+        $brand = Brand::findOrFail($id);
+
+        // try{
+        //      $brand = 
+        // }
+        // catch(){
+
+        // }
+        return response()->json($brand);
     }
 
     /**

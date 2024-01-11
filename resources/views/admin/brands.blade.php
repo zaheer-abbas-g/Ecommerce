@@ -42,11 +42,17 @@
                             <div class="mb-3">
                                 <label for="status">Status</label>
                                 <select id="status" name="status" class="form-control">
+                                    <option selected disabled>select</option> 
                                     <option value="1">Active</option> 
                                     <option value="0">Block</option> 
                                 </select>
                             </div>
                         </div>   
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <input type="hidden" name="brand_id" id="brand_id" class="form-control">	
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-success" id="brandbtn">Save brand</button>
@@ -97,7 +103,18 @@
                     }
             });
             
+       
+
             /////////// show Brand ////////////
+
+            $('.modal').on('hidden.bs.modal',function(){
+                $("#status").val('').trigger('change');
+                $('#name').val('');
+                $('#slug').val('');
+                $('#status').val('select');
+                $('#heading').html('Create Brand');
+                $('#brandbtn').html('Save Brand');
+            })
 
             var table = $('.data-table').DataTable({
                 processing: true,
@@ -107,7 +124,7 @@
                     {data: 'DT_RowIndex', name: 'DT_RowIndex'},
                     {data: 'name','name':'Name'},
                     {data: 'slug','name':'Slug'},
-                    {data: 'status','name':'Status'},
+                    {data: 'status','name':'status'},
                     {data: 'action', name: 'action', orderable: false, searchable: false},
 
                 ]
@@ -130,7 +147,9 @@
                     dataType:"json", 
                     processData: false,
                     contentType: false, 
+                    cache: false,
                     success:function(response){
+                        table.draw();
                     console.log(response);
                     $(".modal").modal("hide"); 
                     Swal.fire({
@@ -140,7 +159,6 @@
                         showConfirmButton: false,
                         timer: 1000
                     });
-                    table.draw();
                     }
                 })
 
@@ -164,6 +182,31 @@
                         }
                     });
                 });
+
+
+
+                ///////// Edit Brnad /////////
+
+                $('body').on('click','.editProduct',function(){
+                   
+                    var brand_id = $(this).data('id');
+                    $.ajax({
+                        url:"{{url('admin/brand-edit')}}"+'/'+brand_id,
+                        type:"get",
+                        dataType:"json",
+                        success:function(response){
+                            console.log(response)
+                            $('.modal').modal('show');
+                            $('#name').val(response.name);
+                            $('#slug').val(response.slug);
+                            $('#brand_id').val(response.id);
+                            $('#status').val(response.status).trigger('change');
+                            $("#heading").html('Edit brnad');
+                            $('#brandbtn').html('Edit');
+                            table.draw();
+                        }
+                    });
+                })
         });
            
 

@@ -120,6 +120,7 @@ Route::prefix('admin')->middleware(['auth','is_admin'])->group(function(){
     Route::get('/brand/create',[BrandController::class,'create']);
     Route::post('/brand',[BrandController::class,'store']);
     Route::get('/brand-slug',[BrandController::class,'slug'])->name('brand.slug');
+    Route::get('/brand-edit/{id}',[BrandController::class,'edit']);
 });
 
 

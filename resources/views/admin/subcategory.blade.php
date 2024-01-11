@@ -61,7 +61,7 @@
                             <div class="mb-3">
                                 <label for="status">status</label>
                                 <select name="status" id="status" class="form-control">
-                                    <option value="" selected disabled>select</option>
+                                    <option  selected disabled>select</option>
                                     <option value="1">Active</option>
                                     <option value="0">Block</option>
                                 </select>
@@ -122,7 +122,7 @@
                 $('#subbtn').html('Save');
                 $('#name').val('');
                 $('#slug').val('');
-                $('#status').val('');
+                $('#status').val('select');
             });
 
             show_category();

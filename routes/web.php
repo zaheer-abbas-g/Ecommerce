@@ -121,6 +121,8 @@ Route::prefix('admin')->middleware(['auth','is_admin'])->group(function(){
     Route::post('/brand',[BrandController::class,'store']);
     Route::get('/brand-slug',[BrandController::class,'slug'])->name('brand.slug');
     Route::get('/brand-edit/{id}',[BrandController::class,'edit']);
+    Route::delete('/brand-destroy/{id}',[BrandController::class,'destroy']);
+
 });
 
 

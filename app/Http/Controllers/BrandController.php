@@ -82,38 +82,28 @@ class BrandController extends Controller
      */
     public function edit($id)
     {
-        $brand = Brand::findOrFail($id);
-
-        // try{
-        //      $brand = 
-        // }
-        // catch(){
-
-        // }
-        return response()->json($brand);
+                $brand = Brand::findOrFail($id);
+                return response()->json($brand);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Brand $brand)
-    {
-        //
-    }
+  
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Brand $brand)
-    {
-        //
+    public function destroy($id)
+    {   
+                $brand = Brand::find($id);
+                $brand->delete();
+                
+                return response()->json(['message'=>'brand successfully deleted']);
     }
 
     public function slug(Request $request){
 
-        $brand_slug = $request->brand_slug; 
-        $slug = Str::slug($brand_slug);
-        
-        return response()->json(["slug_brand"=>$slug]);
+                $brand_slug = $request->brand_slug; 
+                $slug = Str::slug($brand_slug);
+                
+                return response()->json(["slug_brand"=>$slug]);
     }
 }

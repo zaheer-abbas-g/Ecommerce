@@ -207,6 +207,33 @@
                         }
                     });
                 })
+
+
+                ////////// Delete Brand //////
+
+                $('body').on('click','.deleteProduct',function(){
+
+                    var brand_id = $(this).data('id');
+                       
+                    $.ajax({
+                        url:"{{url('admin/brand-destroy')}}"+'/'+brand_id,
+                        type:"delete",
+                        dataType:"json",
+                        cache: false,
+                        success:function(response){
+                            console.log(response);
+                            Swal.fire({
+                                    title: "Deleted",
+                                    text: response.message,
+                                    icon: "success",
+                                    timer: 1500,
+                                    customClass: 'swal-height',
+                                    showConfirmButton: false,           
+                                });
+                            table.draw();
+                        }
+                    });
+                }); 
         });
            
 

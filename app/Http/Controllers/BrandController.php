@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BrandRequest;
 use App\Models\Brand;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -17,15 +18,15 @@ class BrandController extends Controller
 
         if ($request->ajax()) {
   
-            $data = Brand::latest()->get();
+            $data = Brand::select('id','name','slug','status')->latest()->get();
   
             return Datatables::of($data)
                     ->addIndexColumn()
-                    ->addColumn('action', function($d){
+                    ->addColumn('action', function($row){
    
-                           $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$d->id.'" data-original-title="Edit" class="edit  btn-sm editProduct"><i class="fas fa-edit" style="font-size:36px;color:success"></i> </a>';
+                           $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit  btn-sm editProduct"><i class="fas fa-edit" style="font-size:36px;color:success"></i> </a>';
    
-                           $btn = $btn.' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$d->id.'" data-original-title="Delete" class="btn-sm deleteProduct"><i class="far fa-trash-alt" style="font-size:36px;color:red"></i></a>';
+                           $btn = $btn.' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn-sm deleteProduct"><i class="far fa-trash-alt" style="font-size:36px;color:red"></i></a>';
     
                             return $btn;
                     })
@@ -55,7 +56,7 @@ class BrandController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(BrandRequest $request)
     {
            $brand = Brand::updateOrCreate(
             [

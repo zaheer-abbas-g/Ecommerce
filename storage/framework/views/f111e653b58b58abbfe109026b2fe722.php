@@ -28,14 +28,16 @@
                     <div class="modal-body">
                         <div class="col-md-12">
                             <div class="mb-3">
-                                <label for="name">Name</label>
+                                <label for="name">Name<span style="color: red">*</span></label>
                                 <input type="text" name="name" id="name" class="form-control" placeholder="Name">	
+                                <p id="name_error" class="text-danger"> </p> 
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="mb-3">
-                                <label for="email">Slug</label>
-                                <input type="text" name="slug" id="slug" class="form-control" placeholder="Slug">	
+                                <label for="email">Slug<span style="color: red">*</span></label>
+                                <input type="text" name="slug" id="slug" class="form-control" placeholder="Slug" readonly>	
+                                <p id="slug_error" class="text-danger"> </p>    
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -46,6 +48,7 @@
                                     <option value="1">Active</option> 
                                     <option value="0">Block</option> 
                                 </select>
+                                <p id="status_error" class="text-danger"> </p>    
                             </div>
                         </div>   
                         <div class="col-md-12">
@@ -118,8 +121,8 @@
 
             var table = $('.data-table').DataTable({
                 processing: true,
-                // serverSide: true,
-                ajax:"<?php echo e(route('brand.index')); ?>",
+                serverSide: true,
+                ajax:"<?php echo e(url('admin/brand')); ?>",
                 columns:[
                     {data: 'DT_RowIndex', name: 'DT_RowIndex'},
                     {data: 'name','name':'Name'},
@@ -149,16 +152,27 @@
                     contentType: false, 
                     // cache: false,
                     success:function(response){
+                        console.log(response);
+                        $(".modal").modal("hide"); 
+                        
+                        Swal.fire({
+                            position: "top-end",
+                            icon: "success",
+                            title: response.message,
+                            showConfirmButton: false,
+                            timer: 1000
+                        });
                         table.draw();
-                    console.log(response);
-                    $(".modal").modal("hide"); 
-                    Swal.fire({
-                        position: "top-end",
-                        icon: "success",
-                        title: response.message,
-                        showConfirmButton: false,
-                        timer: 1000
-                    });
+                        //     $("#name_error").html("");
+                        //     $("#slug_error").html("");
+                        //     $("#status_error").html("");
+                    },
+                    error:function(e){
+                            var error = e.responseJSON.errors
+                            // console.log(error)
+                            $("#name_error").html(error.name);
+                            $("#slug_error").html(error.slug);
+                            $("#status_error").html(error.status);
                     }
                 })
 
@@ -177,7 +191,6 @@
                         },
                         dataType:"json",
                         success:function(response){
-                            // console.json(response.slug_brand);
                             $("#slug").val(response.slug_brand);
                         }
                     });
@@ -194,6 +207,7 @@
                         url:"<?php echo e(url('admin/brand-edit')); ?>"+'/'+brand_id,
                         type:"get",
                         dataType:"json",
+                        cache:false,
                         success:function(response){
                             console.log(response)
                             $('.modal').modal('show');
@@ -217,9 +231,9 @@
                        
                     $.ajax({
                         url:"<?php echo e(url('admin/brand-destroy')); ?>"+'/'+brand_id,
-                        type:"delete",
+                        type:"get",
                         dataType:"json",
-                        cache: false,
+                       
                         success:function(response){
                             console.log(response);
                             Swal.fire({

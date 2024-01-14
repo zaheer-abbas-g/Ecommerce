@@ -16,9 +16,11 @@
 		<link rel="stylesheet" href="{{asset('admin_assets/css/adminlte.min.css')}}">
 		<link rel="stylesheet" href="{{asset('admin_assets/css/custom.css')}}">
 		<!-- DataTable Css -->
+			
 		<link rel="stylesheet" href="{{asset('admin_assets/dataTable/datatable.min.css')}}">
-		<!-- Fontawesome css-->
-		<link rel="stylesheet" href="{{asset('fontawesome-free-5.15.4/css/all.min.css')}}">
+		<link rel="stylesheet" href="{{asset('fontawesome-free-5.15.4/css/all.min.css')}}"> 
+
+		 <link rel="stylesheet" href="{{asset('admin_assets/plugins/summernote/summernote-bs4.min.css')}}">
 		
         @yield('style')
 	</head>
@@ -118,7 +120,7 @@
 								</a>
 							</li>
 							<li class="nav-item">
-								<a href="{{asset('admin/products')}}" class="nav-link">
+								<a href="{{asset('admin/product')}}" class="nav-link">
 									<i class="nav-icon fas fa-tag"></i>
 									<p>Products</p>
 								</a>
@@ -182,10 +184,16 @@
 
 	
 		<!-- AdminLTE App -->
+		<script src="{{asset('admin_assets/plugins/summernote/summernote.min.js')}}"></script>
+		<link rel="stylesheet" href="{{asset('admin_assets/plugins/summernote/summernote.min.css')}}"> --}}
+		
 		<script src="{{asset('admin_assets/js/adminlte.min.js')}}"></script>
 		<!-- AdminLTE for demo purposes -->
 		<script src="{{asset('admin_assets/js/demo.js')}}"></script>
 		<script src="{{asset('admin_assets/sweetalert/sweetalert.js')}}"></script>
+
+		 <script src="{{asset('admin_assets/plugins/summernote/summernote-bs4.min.js')}}"></script>
+		 <script src="{{asset('admin_assets/plugins/dropzone/dropzone.js')}}"></script>
 
         @yield('script')
 	</body>

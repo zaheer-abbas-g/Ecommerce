@@ -58,6 +58,8 @@ class BrandController extends Controller
      */
     public function store(BrandRequest $request)
     {
+      
+
            $brand = Brand::updateOrCreate(
             [
                 'id'=> $request->brand_id
@@ -67,7 +69,7 @@ class BrandController extends Controller
                  'slug' => $request->slug,
                  'status' => $request->status,
              ]);
-        return response()->json(['message'=> 'Brand sussessfully added']);
+        return response()->json(['message'=> 'Brand sussessfully added','data'=> $brand ]);
     }
 
     /**

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SubCategoryController;
@@ -78,9 +79,9 @@ Route::prefix('admin')->middleware(['auth','is_admin'])->group(function(){
     // Route::get('/create-brands',function(){
     //     return view('admin.create_brands');
     // });
-    Route::get('/create-products',function(){
-        return view('admin.create_products');
-    });
+    // Route::get('/create-products',function(){
+    //     return view('admin.create_products');
+    // });
     Route::get('/create-users',function(){
         return view('admin.create_user');
     });
@@ -122,6 +123,18 @@ Route::prefix('admin')->middleware(['auth','is_admin'])->group(function(){
     Route::get('/brand-slug',[BrandController::class,'slug'])->name('brand.slug');
     Route::get('/brand-edit/{id}',[BrandController::class,'edit']);
     Route::get('/brand-destroy/{id}',[BrandController::class,'destroy']);
+
+
+    ///////////// Products /////////////
+
+    Route::get('/product',[ProductController::class,'index']);
+    Route::get('/create-product',[ProductController::class,'createProduct']);
+    Route::get('/product-slug',[ProductController::class,'productSlug']);
+    Route::post('/product-store',[ProductController::class,'store']);
+    Route::get('/product-sub-category',[ProductController::class,'productSubCategory']);
+
+    
+    
 
 });
 

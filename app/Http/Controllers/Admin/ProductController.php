@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Product;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -40,8 +41,25 @@ class ProductController extends Controller
     }
     public function store(ProductRequest $request){
 
-        $data = $request->all();
-        return response()->json(['data' => $data]);
+        // $data = $request->all();
+            $product                  = new Product;
+            $product->title           = $request->title;
+            $product->slug            = $request->slug;
+            $product->description     = $request->description;
+            $product->sku             = $request->sku;
+            $product->barcode         = $request->barcode;
+            $product->category_id     = $request->category;
+            $product->sub_category_id = $request->sub_category;
+            $product->brand_id        = $request->brand;
+            $product->price           = $request->price;
+            $product->compare_price   = $request->compare_price;
+            $product->is_featured     = $request->is_featured;
+            $product->track_quantity  = $request->track_qty;
+            $product->quantity        = $request->qty;
+            $product->status          = $request->status;
+            $product->save();
+
+        return response()->json(['data' => $product]);
     }
 
     public function productSubCategory(Request $request){

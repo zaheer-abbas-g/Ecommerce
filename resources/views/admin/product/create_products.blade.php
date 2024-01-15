@@ -31,12 +31,14 @@
                                     <div class="mb-3">
                                         <label for="title">Title</label>
                                         <input type="text" name="title" id="title" class="form-control" placeholder="Title">	
+                                        <p id="title_eror" class="text-danger"> </p>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="mb-3">
                                         <label for="title">Slug</label>
                                         <input type="text" name="slug" id="slug" class="form-control" placeholder="Slug" readonly>	
+                                        <p id="slug_eror" class="text-danger"> </p> 
                                     </div>
                                 </div>
                                 <div class="col-md-12">
@@ -65,13 +67,14 @@
                                 <div class="col-md-12">
                                     <div class="mb-3">
                                         <label for="price">Price</label>
-                                        <input type="text" name="price" id="price" class="form-control" placeholder="Price">	
+                                        <input type="number" name="price" id="price" class="form-control" placeholder="Price">	
+                                        <p id="price_eror" class="text-danger"> </p> 
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="mb-3">
                                         <label for="compare_price">Compare at Price</label>
-                                        <input type="text" name="compare_price" id="compare_price" class="form-control" placeholder="Compare Price">
+                                        <input type="number" name="compare_price" id="compare_price" class="form-control" placeholder="Compare Price">
                                         <p class="text-muted mt-3">
                                             To show a reduced price, move the product’s original price into Compare at price. Enter a lower value into Price.
                                         </p>	
@@ -99,13 +102,15 @@
                                 <div class="col-md-12">
                                     <div class="mb-3">
                                         <div class="custom-control custom-checkbox">
-                                            <input class="custom-control-input" type="checkbox" id="track_qty" name="track_qty" checked>
+                                             <input  type="hidden" name="track_qty" value="No" >
+                                             <input  type="checkbox" class="custom-control-input"  id="track_qty" name="track_qty" value="Yes" checked>
                                             <label for="track_qty" class="custom-control-label">Track Quantity</label>
                                         </div>
                                     </div>
                                     <div class="mb-3">
                                         <input type="number" min="0" name="qty" id="qty" class="form-control" placeholder="Qty">	
-                                    </div>
+                                        <p id="qty_eror" class="text-danger"> </p> 
+                                     </div>
                                 </div>                                         
                             </div>
                         </div>	                                                                      
@@ -138,6 +143,7 @@
                                         @endforeach
                                     @endif
                                 </select>
+                                <p id="category_eror" class="text-danger"> </p> 
                             </div>
                             <div class="mb-3">
                                 <label for="category">Sub category</label>
@@ -175,9 +181,10 @@
                             <div class="mb-3">
                                 <select name="is_featured" id="is_featured" class="form-control">
                                     <option value="" selected disabled>select</option>
-                                    <option value="0">No</option>
-                                    <option value="1">Yes</option>                                                
+                                    <option value="Yes">Yes</option>                                                
+                                    <option value="No">No</option>
                                 </select>
+                                <p id="featured_eror" class="text-danger"> </p> 
                             </div>
                         </div>
                     </div>                                 
@@ -185,7 +192,7 @@
             </div>
             
             <div class="pb-5 pt-3">
-                <button type="button" class="btn btn-primary">Create</button>
+                <button type="button" id="productbtn" class="btn btn-primary">Create</button>
                 <a href="products.html" class="btn btn-outline-dark ml-3">Cancel</a>
             </div>
         </div>
@@ -299,7 +306,7 @@
 
         //////////// Product Form //////////
 
-        $('#productForm').on('click',function(e){
+        $('#productbtn').on('click',function(e){
             e.preventDefault();
 
             var formData = new FormData($('#productForm')[0]);
@@ -312,9 +319,26 @@
                 contentType:false,
                 success:function(response){
                     console.log(response);
+                  
+                    $('#productForm')[0].reset();
+                    // $('#productbtn').prop('disabled','true');
+                    $('#title_eror').html('');  
+                    $('#slug_eror').html('');
+                    $('#price_eror').html('');
+                    $('#sku_eror').html('');
+                    $('#category_eror').html('');
+                    $('#featured_eror').html('');
+                
                 },
                 error:function(e){
-                    console.log(e);
+                    var error = e.responseJSON.errors;
+                    console.log(error);
+                    $('#title_eror').html(error.title);
+                    $('#slug_eror').html(error.slug);
+                    $('#price_eror').html(error.price);
+                    $('#sku_eror').html(error.sku);
+                    $('#category_eror').html(error.category);
+                    $('#featured_eror').html(error.is_featured);
                 }
 
             })

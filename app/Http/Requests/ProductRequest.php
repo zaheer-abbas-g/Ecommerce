@@ -21,16 +21,19 @@ class ProductRequest extends FormRequest
      */
     public function rules(): array
     {
-        $data = [
+        $data= [
             'title' => 'required',
-            'slug'  =>  'required',
+            'slug'  =>  'required|unique:products,slug',
             'price'  =>  'required|numeric',
-            'sku'  =>  'required',
+            'sku'  =>  'required|unique:products,sku',
             'track_qty'  =>  'required|in:Yes,No',
             'category'  =>  'required|numeric',
             'is_featured'  =>  'required|in:Yes,No',
         ];
 
+        if(!empty($data['track_qty']) && $data['track_qty']=="Yes" ){
+            $data['qty'] = 'required|numeric';
+        }
         return $data;
     }
 }

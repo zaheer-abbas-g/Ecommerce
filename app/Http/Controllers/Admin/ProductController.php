@@ -41,7 +41,7 @@ class ProductController extends Controller
     }
     public function store(ProductRequest $request){
 
-        // $data = $request->all();
+        $data = $request->all();
             $product                  = new Product;
             $product->title           = $request->title;
             $product->slug            = $request->slug;
@@ -57,9 +57,9 @@ class ProductController extends Controller
             $product->track_quantity  = $request->track_qty;
             $product->quantity        = $request->qty;
             $product->status          = $request->status;
-            $product->save();
+            // $product->save();
 
-        return response()->json(['data' => $product]);
+        return response()->json(['data' => $product,'alldata'=>$data]);
     }
 
     public function productSubCategory(Request $request){

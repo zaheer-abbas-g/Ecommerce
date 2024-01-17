@@ -20,7 +20,7 @@
     <!-- Main content -->
     <section class="content">
         <!-- Default box -->
-        <form id='productForm' name="productForm">
+        <form id='productForm' name="productForm" method="post" class="dropzone" id="myDropzone" enctype="multipart/form-data">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-8">
@@ -51,10 +51,10 @@
                         </div>	                                                                      
                     </div>
                     <div class="card mb-3">
-                        <div class="card-body">
+                        <div class="card-body" style="height:300px ">
                             <h2 class="h4 mb-3">Media</h2>								
                             <div id="image" name="image" class="dropzone dz-clickable">
-                                <div class="dz-message needsclick">    
+                                <div class="dz-message needsclick text-center">    
                                     <br>Drop files here or click to upload.<br><br>                                            
                                 </div>
                             </div>
@@ -212,23 +212,14 @@
 @section('script')
 <script>
     Dropzone.autoDiscover = false;    
-    // $(function () {
-    //     // Summernote
-    //     $('.summernote').summernote({
-    //         height: '300px'
-    //     });
+    //  $(function () {
+    // //     // Summernote
+    //      $('.summernote').summernote({
+    //          height: '300px'
+    //      });
        
-    //     // const dropzone = $("#image").dropzone({ 
-    //     //     url:  "create-product.html",
-    //     //     maxFiles: 5,
-    //     //     addRemoveLinks: true,
-    //     //     acceptedFiles: "image/jpeg,image/png,image/gif",
-    //     //     headers: {
-    //     //         'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-    //     //     }, success: function(file, response){
-    //     //         $("#image_id").val(response.id);
-    //     //     }
-    //     // });
+       
+
 
     // });
 
@@ -249,6 +240,26 @@
       
          
 
+    var currentFile = null;
+     const dropzone = $("#image").dropzone({ 
+            url:  "create-product.html",
+            maxFiles: 5, 
+            addRemoveLinks: true,
+            acceptedFiles: "image/jpeg,image/png,image/gif",
+            paramName: "file", 
+            // maxFilesize: 2, // MB
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            },
+            init: function() {
+
+}
+            
+        });
+
+
+
+        
         $('.summernote').summernote({
             height: '300px'
         });
@@ -347,5 +358,11 @@
 
     });
 </script>
-
+<style>
+    .dropzone {
+    width: 300%;
+    height: 80%;
+    min-height: 0px !important;
+    }   
+    </style>
 @endsection

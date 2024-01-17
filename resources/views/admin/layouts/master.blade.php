@@ -8,6 +8,7 @@
 		<title>@yield('title')</title>
 		<!-- Google Font: Source Sans Pro -->
 		<meta name="csrf-token" content="{{ csrf_token() }}" />
+		
 		<script src="{{asset('admin_assets/plugins/jquery/jquery.min.js')}}"></script>
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 		<!-- Font Awesome -->
@@ -21,7 +22,9 @@
 		<link rel="stylesheet" href="{{asset('fontawesome-free-5.15.4/css/all.min.css')}}"> 
 
 		 <link rel="stylesheet" href="{{asset('admin_assets/plugins/summernote/summernote-bs4.min.css')}}">
-		
+		 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.0/min/dropzone.min.css">
+		 <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.0/min/dropzone.min.js"></script>
+		 
         @yield('style')
 	</head>
 	<body class="hold-transition sidebar-mini">
@@ -193,7 +196,7 @@
 		<script src="{{asset('admin_assets/sweetalert/sweetalert.js')}}"></script>
 
 		 <script src="{{asset('admin_assets/plugins/summernote/summernote-bs4.min.js')}}"></script>
-		 <script src="{{asset('admin_assets/plugins/dropzone/dropzone.js')}}"></script>
+		
 
         @yield('script')
 	</body>

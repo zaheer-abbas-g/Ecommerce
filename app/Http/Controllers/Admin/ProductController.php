@@ -7,6 +7,7 @@ use App\Http\Requests\ProductRequest;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -39,7 +40,7 @@ class ProductController extends Controller
         $slug = Str::slug($slug);
         return response()->json(['slug'=>$slug]);
     }
-    public function store(ProductRequest $request){
+    public function store(Request $request){
 
         $data = $request->all();
             $product                  = new Product;
@@ -68,5 +69,35 @@ class ProductController extends Controller
         $SubCategory = SubCategory::where('category_id',$category_id)->get();
         return response()->json(['subcategories'=> $SubCategory]);
     }
-    
+
+    public function createProductzone(Request $request){
+        
+            // $pimage = new ProductImage;
+            // $image = time().'.'.$request->image->extension();
+            // $request->image->move(public_path('product images'),$image);
+            // $image = explode(',',$image);
+            // $pimage->image = $image;
+            // $pimage->save($image);
+
+            $images=array();
+           $data='';
+            if($files=$request->file('image')){
+                foreach($files as $file){
+                    $name=$file->getClientOriginalName();
+                    $file->move('image',$name);
+                    $images[]=$name;
+                }
+            }
+
+            foreach($images as $img){
+                $data= ProductImage::create([
+                    'image' => $img,
+                    'product_id' => 1
+                ]);
+            }
+            return response()->json([
+                'status' =>true,
+                'image' =>  $data,    
+            ]);
+    }
 }

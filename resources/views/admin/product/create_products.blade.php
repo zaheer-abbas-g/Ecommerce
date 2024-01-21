@@ -20,8 +20,9 @@
     <!-- Main content -->
     <section class="content">
         <!-- Default box -->
-        <form id='productForm' name="productForm" method="post" class="dropzone" id="myDropzone" enctype="multipart/form-data">
-        <div class="container-fluid">
+        <form id='productForm' action="{{url('create-product')}}" name="productForm" method="post" id="myDropzone" enctype="multipart/form-data">
+            @csrf
+            <div class="container-fluid">
             <div class="row">
                 <div class="col-md-8">
                     <div class="card mb-3">
@@ -232,30 +233,66 @@
      Pass Header Token
      --------------------------------------------
      --------------------------------------------*/ 
-    $.ajaxSetup({
-          headers: {
-              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          }
-    });
+    // $.ajaxSetup({
+    //       headers: {
+    //           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //       }
+    // });
       
          
 
     var currentFile = null;
      const dropzone = $("#image").dropzone({ 
-            url:  "create-product.html",
-            maxFiles: 5, 
+            url:  "{{url('admin/create-Productzone')}}",
+            maxFiles: 10, 
             addRemoveLinks: true,
+            autoProcessQueue: false,
             acceptedFiles: "image/jpeg,image/png,image/gif",
-            paramName: "file", 
+            paramName: "image", 
+            uploadMultiple: true,
+            parallelUploads: 10,
             // maxFilesize: 2, // MB
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            },
+            headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+            //  success:function(response){
+            //       console.log(response);
+            //      }
             init: function() {
-
-}
+                
+                var myDropzone = this;
+       
+                $("#productbtn").click(function (e) {
+                    e.preventDefault();
+                    myDropzone.processQueue();
             
-        });
+                });
+                
+                this.on("processing", function() {
+                    this.options.autoProcessQueue = true;
+                });
+
+
+                this.on("success", function(file, response) {
+                //   myDropzone.removeFile(file);
+                     myDropzone.removeAllFiles(true);
+                });
+                  
+                
+                 }
+            });
+
+                  
+            
+            // this.on("sendingmultiple", function(data, xhr, formData) {
+            // formData.append("firstname", jQuery("#title").val());
+            // // formData.append("lastname", jQuery("#lastname").val());
+            
+           // });
+
+            
+
+
+          
+
 
 
 
@@ -330,7 +367,7 @@
                 contentType:false,
                 success:function(response){
                     console.log(response);
-                  
+                   
                     $('#productForm')[0].reset();
                     // $('#productbtn').prop('disabled','true');
                     $('#title_eror').html('');  

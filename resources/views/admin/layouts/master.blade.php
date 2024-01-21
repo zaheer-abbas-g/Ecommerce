@@ -7,7 +7,8 @@
 
 		<title>@yield('title')</title>
 		<!-- Google Font: Source Sans Pro -->
-		<meta name="csrf-token" content="{{ csrf_token() }}" />
+		<meta name="csrf-token" content="{{ csrf_token() }}"> 
+		
 		
 		<script src="{{asset('admin_assets/plugins/jquery/jquery.min.js')}}"></script>
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">

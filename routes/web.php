@@ -132,6 +132,7 @@ Route::prefix('admin')->middleware(['auth','is_admin'])->group(function(){
     Route::get('/product-slug',[ProductController::class,'productSlug']);
     Route::post('/product-store',[ProductController::class,'store']);
     Route::get('/product-sub-category',[ProductController::class,'productSubCategory']);
+    Route::post('/create-Productzone',[ProductController::class,'createProductzone']);
 
     
     

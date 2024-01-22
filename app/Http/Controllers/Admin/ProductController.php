@@ -43,6 +43,7 @@ class ProductController extends Controller
     public function store(Request $request){
 
         $data = $request->all();
+        // dd($data);
             $product                  = new Product;
             $product->title           = $request->title;
             $product->slug            = $request->slug;
@@ -58,9 +59,9 @@ class ProductController extends Controller
             $product->track_quantity  = $request->track_qty;
             $product->quantity        = $request->qty;
             $product->status          = $request->status;
-            // $product->save();
+            $product->save();                                                                     
 
-        return response()->json(['data' => $product,'alldata'=>$data]);
+        return response()->json(['data' => $product,'alldata'=>$data,'product_id'=> $product->id]);
     }
 
     public function productSubCategory(Request $request){
@@ -71,33 +72,31 @@ class ProductController extends Controller
     }
 
     public function createProductzone(Request $request){
-        
-            // $pimage = new ProductImage;
-            // $image = time().'.'.$request->image->extension();
-            // $request->image->move(public_path('product images'),$image);
-            // $image = explode(',',$image);
-            // $pimage->image = $image;
-            // $pimage->save($image);
+        dd($request->all());
+            $image_data ='';
+            $store_image = [];
+            if($request->has('image')){
+                foreach ($request->image as $key => $images) {
+                    $imageName = time().'.'.$images->extension();
+                    $images->move(public_path('product images'),$imageName);
 
-            $images=array();
-           $data='';
-            if($files=$request->file('image')){
-                foreach($files as $file){
-                    $name=$file->getClientOriginalName();
-                    $file->move('image',$name);
-                    $images[]=$name;
+                    $store_image[] = $imageName;
+                }
+
+                foreach ($store_image as $key => $img) {
+                        $image_data = ProductImage::create(
+                            [
+                                'image' => $img,
+                                'product_id' => 1,
+                               
+                            ]
+                    );
                 }
             }
 
-            foreach($images as $img){
-                $data= ProductImage::create([
-                    'image' => $img,
-                    'product_id' => 1
-                ]);
-            }
-            return response()->json([
-                'status' =>true,
-                'image' =>  $data,    
-            ]);
-    }
+            return response()->json(['image'=> $image_data]);
+    
+    
+    
+        }
 }

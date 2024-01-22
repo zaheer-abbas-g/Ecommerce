@@ -20,6 +20,7 @@
     <!-- Main content -->
     <section class="content">
         <!-- Default box -->
+        
         <form id='productForm' action="<?php echo e(url('create-product')); ?>" name="productForm" method="post" id="myDropzone" enctype="multipart/form-data">
             <?php echo csrf_field(); ?>
             <div class="container-fluid">
@@ -61,6 +62,7 @@
                             </div>
                         </div>	                                                                      
                     </div>
+                    
                     <div class="card mb-3">
                         <div class="card-body">
                             <h2 class="h4 mb-3">Pricing</h2>								
@@ -103,15 +105,15 @@
                                 <div class="col-md-12">
                                     <div class="mb-3">
                                         <div class="custom-control custom-checkbox">
-                                             <input  type="hidden" name="track_qty" value="No" >
-                                             <input  type="checkbox" class="custom-control-input"  id="track_qty" name="track_qty" value="Yes" checked>
+                                            <input  type="hidden" name="track_qty" value="No" >
+                                            <input  type="checkbox" class="custom-control-input"  id="track_qty" name="track_qty" value="Yes" checked>
                                             <label for="track_qty" class="custom-control-label">Track Quantity</label>
                                         </div>
                                     </div>
                                     <div class="mb-3">
                                         <input type="number" min="0" name="qty" id="qty" class="form-control" placeholder="Qty">	
                                         <p id="qty_eror" class="text-danger"> </p> 
-                                     </div>
+                                    </div>
                                 </div>                                         
                             </div>
                         </div>	                                                                      
@@ -136,12 +138,12 @@
                             <div class="mb-3">
                                 <label for="category">Category</label>
                                 <select name="category" id="category" class="form-control">
-                                   
+                                    
                                     <option value="" selected disabled>select</option>
                                     <?php if(!empty($categories)): ?>
-                                        <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                            <option value="<?php echo e($category->id); ?>"><?php echo e($category->name); ?></option>
-                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($category->id); ?>"><?php echo e($category->name); ?></option>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     <?php endif; ?>
                                 </select>
                                 <p id="category_eror" class="text-danger"> </p> 
@@ -150,8 +152,11 @@
                                 <label for="category">Sub category</label>
                                 <select name="sub_category" id="sub_category" class="form-control">
                                     <option value="" selected disabled>select</option>
-                                   
+                                    
                                 </select>
+                            </div>
+                            <div class="mb-3">
+                                <input type="text" name="productid" id="proudct_id" class="form-control">
                             </div>
                         </div>
                     </div> 
@@ -187,6 +192,7 @@
                     </div>                                 
                 </div>
             </div>
+            <button id="p">p</button>
             
             <div class="pb-5 pt-3">
                 <button type="button" id="productbtn" class="btn btn-primary">Create</button>
@@ -256,10 +262,18 @@
                 
                 var myDropzone = this;
        
-                $("#productbtn").click(function (e) {
+                $("#p").click(function (e) {
+                    // alert(12);
+                    // return;
                     e.preventDefault();
                     myDropzone.processQueue();
             
+                });
+
+                this.on("sending", function (file, xhr, formData) {
+                    // Add custom data to the formData
+                    formData.append("proudctid", $("#proudct_id").val());
+                    // Add any other custom data you want to send
                 });
                 
                 this.on("processing", function() {
@@ -323,8 +337,6 @@
         
         $('#category').on('change',function(){
 
-        
-
             var category_id = $('#category').val();
             alert(category_id);
             $.ajax({
@@ -352,8 +364,10 @@
 
         $('#productbtn').on('click',function(e){
             e.preventDefault();
-
+            
+         
             var formData = new FormData($('#productForm')[0]);
+          
             $.ajax({
                 url:"<?php echo e(url('admin/product-store')); ?>",
                 type:"post",
@@ -362,8 +376,15 @@
                 processData:false,
                 contentType:false,
                 success:function(response){
+                    $('#product_id').val(response.product_id);
+                    
+                  var hangoutButton = document.getElementById("p");
+                 hangoutButton.click(); // this will trigger the click event
+
                     console.log(response);
-                   
+                    // console.log(response.product_id);
+                    // $('#pid').append(`<input type="text" name="productid" id="proudct_id" class="form-control" value="${response.product_id}">`);
+
                     $('#productForm')[0].reset();
                     // $('#productbtn').prop('disabled','true');
                     $('#title_eror').html('');  

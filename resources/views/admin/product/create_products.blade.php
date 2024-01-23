@@ -60,6 +60,7 @@
                                     <br>Drop files here or click to upload.<br><br>                                            
                                 </div>
                             </div>
+                            <p id="image_eror" class="text-danger"> </p> 
                         </div>	                                                                      
                     </div>
                     
@@ -78,9 +79,6 @@
                                     <div class="mb-3">
                                         <label for="compare_price">Compare at Price</label>
                                         <input type="number" name="compare_price" id="compare_price" class="form-control" placeholder="Compare Price">
-                                        <p class="text-muted mt-3">
-                                            To show a reduced price, move the product’s original price into Compare at price. Enter a lower value into Price.
-                                        </p>	
                                     </div>
                                 </div>                                            
                             </div>
@@ -94,6 +92,7 @@
                                     <div class="mb-3">
                                         <label for="sku">SKU (Stock Keeping Unit)</label>
                                         <input type="text" name="sku" id="sku" class="form-control" placeholder="sku">	
+                                        <p id="sku_eror" class="text-danger"> </p> 
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -149,14 +148,14 @@
                                 <p id="category_eror" class="text-danger"> </p> 
                             </div>
                             <div class="mb-3">
-                                <label for="category">Sub category</label>
-                                <select name="sub_category" id="sub_category" class="form-control">
+                                <label for="category" >Sub category</label>
+                                <select name="sub_category" id="sub_category" class="form-control" readonly>
                                     <option value="" selected disabled>select</option>
                                     
                                 </select>
                             </div>
-                            <div class="mb-3">
-                                <input type="text" name="productid" id="proudct_id" class="form-control">
+                            <div class="mb-3" id="pid">
+                                {{-- <input type="text" name="productid" id="proudct_id" class="form-control" value="3"> --}}
                             </div>
                         </div>
                     </div> 
@@ -172,11 +171,6 @@
                                                 <option value="{{$item->id}}">{{$item->name}}</option>      
                                             @endforeach
                                     @endif
-                                    {{-- <option value="">Apple</option>
-                                    <option value="">Vivo</option>
-                                    <option value="">HP</option>
-                                    <option value="">Samsung</option>
-                                    <option value="">DELL</option> --}}
                                 </select>
                             </div>
                         </div>
@@ -196,7 +190,7 @@
                     </div>                                 
                 </div>
             </div>
-            <button id="p">p</button>
+            <div id="p"></div>
             
             <div class="pb-5 pt-3">
                 <button type="button" id="productbtn" class="btn btn-primary">Create</button>
@@ -219,16 +213,6 @@
 @section('script')
 <script>
     Dropzone.autoDiscover = false;    
-    //  $(function () {
-    // //     // Summernote
-    //      $('.summernote').summernote({
-    //          height: '300px'
-    //      });
-       
-       
-
-
-    // });
 
     $(document).ready(function(){
 
@@ -271,15 +255,17 @@
                     // return;
                     e.preventDefault();
                     myDropzone.processQueue();
-            
+                  
                 });
 
+               
+                
+                  
                 this.on("sending", function (file, xhr, formData) {
                     // Add custom data to the formData
                     formData.append("proudctid", $("#proudct_id").val());
                     // Add any other custom data you want to send
                 });
-                
                 this.on("processing", function() {
                     this.options.autoProcessQueue = true;
                 });
@@ -289,28 +275,12 @@
                 //   myDropzone.removeFile(file);
                      myDropzone.removeAllFiles(true);
                 });
-                  
+            
                 
                  }
             });
 
-                  
-            
-            // this.on("sendingmultiple", function(data, xhr, formData) {
-            // formData.append("firstname", jQuery("#title").val());
-            // // formData.append("lastname", jQuery("#lastname").val());
-            
-           // });
 
-            
-
-
-          
-
-
-
-
-        
         $('.summernote').summernote({
             height: '300px'
         });
@@ -342,7 +312,6 @@
         $('#category').on('change',function(){
 
             var category_id = $('#category').val();
-            alert(category_id);
             $.ajax({
                 url:"{{url('admin/product-sub-category')}}",
                 type:"get",
@@ -380,14 +349,14 @@
                 processData:false,
                 contentType:false,
                 success:function(response){
-                    $('#product_id').val(response.product_id);
+                    // $('#proudct_id').val(response.proudct_id);
+                    $('#pid').append(`<input type="text" name="productid" id="proudct_id" class="form-control" value="${response.product_id}">`);
                     
                   var hangoutButton = document.getElementById("p");
-                 hangoutButton.click(); // this will trigger the click event
+                      hangoutButton.click(); // this will trigger the click event
 
                     console.log(response);
                     // console.log(response.product_id);
-                    // $('#pid').append(`<input type="text" name="productid" id="proudct_id" class="form-control" value="${response.product_id}">`);
 
                     $('#productForm')[0].reset();
                     // $('#productbtn').prop('disabled','true');
@@ -397,7 +366,10 @@
                     $('#sku_eror').html('');
                     $('#category_eror').html('');
                     $('#featured_eror').html('');
-                
+                    $('#prouduct_id').html('');
+                    $('#pid').html('');
+                    
+                    window.location.href="/admin/product";
                 },
                 error:function(e){
                     var error = e.responseJSON.errors;
@@ -408,6 +380,9 @@
                     $('#sku_eror').html(error.sku);
                     $('#category_eror').html(error.category);
                     $('#featured_eror').html(error.is_featured);
+                    $('#sku_eror').html(error.sku);
+
+
                 }
 
             })

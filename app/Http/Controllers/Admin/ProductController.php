@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProductImageRequest;
 use App\Http\Requests\ProductRequest;
 use App\Models\Brand;
 use App\Models\Category;
@@ -11,12 +12,53 @@ use App\Models\ProductImage;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-
+use DataTables;
 
 class ProductController extends Controller
 {
-    public function index(){
+    public function index(Request $request){
 
+
+       if($request->ajax()){
+            $product =  Product::with('product_images:id,product_id,image')->orderBy('id','DESC')->get();
+            return Datatables::of($product)
+                    ->addIndexColumn()
+                    ->addColumn('action',function($row){
+
+                            $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="btn-sm editProduct"><i class="fas fa-edit" style="font-size:36px;color:success"></i></a>';
+
+                            $btn = $btn.'<a href="javascript:void(0)"  data-toggle="tooltip"  data-id="'.$row->id.'"  data-original-title="Delete"   class="btn-sm deleteProduct"><i class="far fa-trash-alt" style="font-size:36px;color:red"></i></a>';
+                            return $btn;
+                        })
+                    ->addColumn('price',function($product){
+                        return "$".$product->price;
+                    })   
+                    ->addColumn('status',function($product){
+                            
+                          if($product->status==1){
+                           return '<p class="btn btn-success btn-sm" style="width:80px; height:30px">active</p><span></a>';
+                        }
+                        else{
+                            return '<p class="btn btn-warning btn-sm" style="width:80px; height:30px">block</p><span></a>';
+                        }     
+                    })
+                    ->addColumn('image',function($product){
+                          
+                            $image = $product->product_images;  
+                            foreach ($image as $key => $images) {
+                                
+                                $path = asset('productimages/'); 
+                                if(!empty($images->image)){
+                                    return "<img src=$path/$images->image width='100px' height='90px'>";
+                                }
+                                else{
+                                    return "<img  src='http://localhost:8000/admin_assets/img/dummy-image-square.jpg' width='100px' height='90px'>";
+                                }
+                            }
+                    })
+                    ->rawColumns(['action','price','status','image'])
+                    ->make(true);
+       }
       
         return view('admin.product.products');
     }
@@ -40,10 +82,9 @@ class ProductController extends Controller
         $slug = Str::slug($slug);
         return response()->json(['slug'=>$slug]);
     }
-    public function store(Request $request){
+    public function store(ProductRequest $request){
 
-        $data = $request->all();
-        // dd($data);
+
             $product                  = new Product;
             $product->title           = $request->title;
             $product->slug            = $request->slug;
@@ -61,7 +102,7 @@ class ProductController extends Controller
             $product->status          = $request->status;
             $product->save();                                                                     
 
-        return response()->json(['data' => $product,'alldata'=>$data,'product_id'=> $product->id]);
+        return response()->json(['data' => $product,'product_id'=> $product->id]);
     }
 
     public function productSubCategory(Request $request){
@@ -72,13 +113,13 @@ class ProductController extends Controller
     }
 
     public function createProductzone(Request $request){
-        dd($request->all());
+        // dd($request->proudctid);
             $image_data ='';
             $store_image = [];
             if($request->has('image')){
                 foreach ($request->image as $key => $images) {
                     $imageName = time().'.'.$images->extension();
-                    $images->move(public_path('product images'),$imageName);
+                    $images->move(public_path('productimages'),$imageName);
 
                     $store_image[] = $imageName;
                 }
@@ -87,7 +128,7 @@ class ProductController extends Controller
                         $image_data = ProductImage::create(
                             [
                                 'image' => $img,
-                                'product_id' => 1,
+                                'product_id' => $request->proudctid,
                                
                             ]
                     );

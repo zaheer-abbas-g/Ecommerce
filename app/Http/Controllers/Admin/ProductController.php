@@ -15,6 +15,7 @@ use Illuminate\Support\Str;
 use DataTables;
 
 class ProductController extends Controller
+
 {
     public function index(Request $request){
 
@@ -25,7 +26,7 @@ class ProductController extends Controller
                     ->addIndexColumn()
                     ->addColumn('action',function($row){
 
-                            $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="btn-sm editProduct"><i class="fas fa-edit" style="font-size:36px;color:success"></i></a>';
+                            $btn = '<a href="'.route('product.edit',$row->id).'" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="btn-sm editProduct"><i class="fas fa-edit" style="font-size:36px;color:success"></i></a>';
 
                             $btn = $btn.'<a href="javascript:void(0)"  data-toggle="tooltip"  data-id="'.$row->id.'"  data-original-title="Delete"   class="btn-sm deleteProduct"><i class="far fa-trash-alt" style="font-size:36px;color:red"></i></a>';
                             return $btn;
@@ -136,8 +137,24 @@ class ProductController extends Controller
             }
 
             return response()->json(['image'=> $image_data]);
-    
-    
-    
+        }
+
+        public function productEdit($id){
+
+        //    echo $id;die;
+           $product = Product::findOrFail($id);
+
+            // return response()->json($product);
+            $data=[];
+            $categories = Category::select('id','name')->orderBy('name','ASC')->get();
+            $brand = Brand::select('id','name')->orderBy('name','ASC')->get();
+            $sub_categories = SubCategory::select('id','name')->orderBy('name','ASC')->get();
+            $data['categories'] = $categories;
+            $data['brand'] = $brand;
+            $data['SubCategories'] = $sub_categories;
+            // $data['products'] =  $product;
+
+           
+           return view('admin.product.product_edit',$data,compact('product'));
         }
 }

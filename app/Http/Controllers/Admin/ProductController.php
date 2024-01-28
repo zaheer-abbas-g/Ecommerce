@@ -145,16 +145,47 @@ class ProductController extends Controller
            $product = Product::findOrFail($id);
 
             // return response()->json($product);
+            // die;
+
             $data=[];
             $categories = Category::select('id','name')->orderBy('name','ASC')->get();
             $brand = Brand::select('id','name')->orderBy('name','ASC')->get();
             $sub_categories = SubCategory::select('id','name')->orderBy('name','ASC')->get();
+            $subCategories_edit = SubCategory::where('category_id',$product->category_id)->get();
             $data['categories'] = $categories;
             $data['brand'] = $brand;
             $data['SubCategories'] = $sub_categories;
-            // $data['products'] =  $product;
-
+            $data['subCategories_edit'] =  $subCategories_edit;
            
            return view('admin.product.product_edit',$data,compact('product'));
+        }
+
+        public function update(Request $request)
+        {
+
+            $product_id = $request->product_id;
+            $ddd = $request->all();
+
+            $product = Product::find($product_id);
+            $product->barcode         = $request->barcode;
+            $product->brand_id        = $request->brand;
+            $product->category_id     = $request->category;
+            $product->compare_price   = $request->compare_price;
+            $product->description     = $request->description;
+            $product->is_featured     = $request->is_featured;
+            $product->price           = $request->price;
+            $product->quantity        = $request->qty;
+            $product->sku             = $request->sku;
+            $product->slug            = $request->slug;
+            $product->status          = $request->status;
+            $product->sub_category_id = $request->sub_category;
+            $product->title           = $request->title;
+            $product->track_quantity  = $request->track_qty;
+            $product->update();
+            
+            // return response()->json($product);
+
+            return redirect()-route('product.edit');
+
         }
 }

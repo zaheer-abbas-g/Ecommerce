@@ -21,7 +21,7 @@
     <section class="content">
         <!-- Default box -->
         
-        <form id='productForm' action="<?php echo e(url('create-product')); ?>" name="productForm" method="post" id="myDropzone" enctype="multipart/form-data">
+        <form id='productForm' name="productForm" method="post" id="myDropzone" enctype="multipart/form-data">
             <?php echo csrf_field(); ?>
             <div class="container-fluid">
             <div class="row">
@@ -67,7 +67,8 @@
                     
                     <div class="card mb-3">
                         <div class="card-body">
-                            <h2 class="h4 mb-3">Pricing</h2>								
+                            <input type="text" value="<?php echo e($product->id); ?>" name="product_id">							
+                            <h2 class="h4 mb-3">Pricing</h2>	
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="mb-3">
@@ -106,7 +107,8 @@
                                     <div class="mb-3">
                                         <div class="custom-control custom-checkbox">
                                             <input  type="hidden" name="track_qty" value="No" >
-                                            <input  type="checkbox" class="custom-control-input"  id="track_qty" name="track_qty" value="Yes" checked>
+                                            <input  type="checkbox" class="custom-control-input"  id="track_qty" name="track_qty" value="Yes"
+                                            <?php echo e(($product->track_quantity == 'Yes')? 'chacked' : ''); ?> checked>
                                             <label for="track_qty" class="custom-control-label">Track Quantity</label>
                                         </div>
                                     </div>
@@ -126,9 +128,8 @@
                             <div class="mb-3">
                                 <select name="status" id="status" class="form-control">
                                     <option value="" selected disabled>select</option>
-                                   
-                                    <option value="1">Active</option>
-                                    <option value="0">Block</option>
+                                        <option value="1" <?php echo e(($product->status == 1) ? 'selected':''); ?>>Active</option>
+                                        <option value="0" <?php echo e(($product->status == 0) ? 'selected' : ''); ?>>Block</option>
                                 </select>
                             </div>
                         </div>
@@ -142,7 +143,7 @@
                                     <option value="" selected disabled>select</option>
                                     <?php if(!empty($categories)): ?>
                                         <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                <option value="<?php echo e($category->id); ?>"><?php echo e($category->name); ?></option>
+                                                <option value="<?php echo e($category->id); ?>" <?php echo e(($product->category_id == $category->id)?'selected':''); ?>><?php echo e($category->name); ?></option>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     <?php endif; ?> 
                                 </select>
@@ -152,8 +153,12 @@
                                 <label for="category" >Sub category</label>
                                 <select name="sub_category" id="sub_category" class="form-control" readonly>
                                     <option value="" selected disabled>select</option>
-                                    
-                                </select>
+                                <?php if(!empty($subCategories_edit)): ?>
+                                    <?php $__currentLoopData = $subCategories_edit; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subCategories): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($subCategories->id); ?>" <?php echo e(($subCategories->id==$product->category_id)? 'selected':''); ?>><?php echo e($subCategories->name); ?></option>   
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <?php endif; ?> 
+                                    </select>
                             </div>
                             <div class="mb-3" id="pid">
                                 
@@ -168,7 +173,7 @@
                                     <option value="" selected disabled>select</option>
                                     <?php if(!empty($brand)): ?>
                                         <?php $__currentLoopData = $brand; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $brnd): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                <option value="<?php echo e($brnd->id); ?>"><?php echo e($brnd->name); ?></option>
+                                                <option value="<?php echo e($brnd->id); ?>" <?php echo e(($product->brand_id== $brnd->id)? 'selected' : ''); ?>><?php echo e($brnd->name); ?></option>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     <?php endif; ?>                                
                                 </select>
@@ -181,8 +186,8 @@
                             <div class="mb-3">
                                 <select name="is_featured" id="is_featured" class="form-control">
                                     <option value="" selected disabled>select</option>
-                                    <option value="Yes">Yes</option>                                                
-                                    <option value="No">No</option>
+                                    <option value="Yes" <?php echo e(($product->is_featured == 'Yes')? 'selected' :''); ?>>Yes</option>                                                
+                                    <option value="No" <?php echo e(($product->is_featured == 'No')? 'selected' : ''); ?>>No</option>
                                 </select>
                                 <p id="featured_eror" class="text-danger"> </p> 
                             </div>
@@ -190,10 +195,10 @@
                     </div>                                 
                 </div>
             </div>
-            <div id="p"></div>
+            
             
             <div class="pb-5 pt-3">
-                <button type="button" id="productbtn" class="btn btn-primary">Create</button>
+                <button type="button" id="productbtn" class="btn btn-primary">Update</button>
                 <a href="products.html" class="btn btn-outline-dark ml-3">Cancel</a>
             </div>
         </div>
@@ -223,62 +228,62 @@
      Pass Header Token
      --------------------------------------------
      --------------------------------------------*/ 
-    // $.ajaxSetup({
-    //       headers: {
-    //           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //       }
-    // });
+    $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+    });
       
          
 
-    var currentFile = null;
-     const dropzone = $("#image").dropzone({ 
-            url:  "<?php echo e(url('admin/create-Productzone')); ?>",
-            maxFiles: 10, 
-            addRemoveLinks: true,
-            autoProcessQueue: false,
-            acceptedFiles: "image/jpeg,image/png,image/gif",
-            paramName: "image", 
-            uploadMultiple: true,
-            parallelUploads: 10,
-            // maxFilesize: 2, // MB
-            headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-            //  success:function(response){
-            //       console.log(response);
-            //      }
-            init: function() {
+    // var currentFile = null;
+    //  const dropzone = $("#image").dropzone({ 
+    //         url:  "<?php echo e(url('admin/create-Productzone')); ?>",
+    //         maxFiles: 10, 
+    //         addRemoveLinks: true,
+    //         autoProcessQueue: false,
+    //         acceptedFiles: "image/jpeg,image/png,image/gif",
+    //         paramName: "image", 
+    //         uploadMultiple: true,
+    //         parallelUploads: 10,
+    //         // maxFilesize: 2, // MB
+    //         headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+    //         //  success:function(response){
+    //         //       console.log(response);
+    //         //      }
+    //         init: function() {
                 
-                var myDropzone = this;
+    //             var myDropzone = this;
        
-                $("#p").click(function (e) {
-                    // alert(12);
-                    // return;
-                    e.preventDefault();
-                    myDropzone.processQueue();
+    //             $("#p").click(function (e) {
+    //                 // alert(12);
+    //                 // return;
+    //                 e.preventDefault();
+    //                 myDropzone.processQueue();
                   
-                });
+    //             });
 
                
                 
                   
-                this.on("sending", function (file, xhr, formData) {
-                    // Add custom data to the formData
-                    formData.append("proudctid", $("#proudct_id").val());
-                    // Add any other custom data you want to send
-                });
-                this.on("processing", function() {
-                    this.options.autoProcessQueue = true;
-                });
+    //             this.on("sending", function (file, xhr, formData) {
+    //                 // Add custom data to the formData
+    //                 formData.append("proudctid", $("#proudct_id").val());
+    //                 // Add any other custom data you want to send
+    //             });
+    //             this.on("processing", function() {
+    //                 this.options.autoProcessQueue = true;
+    //             });
 
 
-                this.on("success", function(file, response) {
-                //   myDropzone.removeFile(file);
-                     myDropzone.removeAllFiles(true);
-                });
+    //             this.on("success", function(file, response) {
+    //             //   myDropzone.removeFile(file);
+    //                  myDropzone.removeAllFiles(true);
+    //             });
             
                 
-                 }
-            });
+    //              }
+    //         });
 
 
         $('.summernote').summernote({
@@ -338,22 +343,22 @@
         $('#productbtn').on('click',function(e){
             e.preventDefault();
             
-         
             var formData = new FormData($('#productForm')[0]);
-          
+            
             $.ajax({
-                url:"<?php echo e(url('admin/product-store')); ?>",
+                url:"<?php echo e(url('admin/product-update')); ?>",
                 type:"post",
                 data:formData,
                 dataType:"json",
                 processData:false,
                 contentType:false,
                 success:function(response){
+                    // alert("kokok");
                     // $('#proudct_id').val(response.proudct_id);
-                    $('#pid').append(`<input type="text" name="productid" id="proudct_id" class="form-control" value="${response.product_id}">`);
+                    // $('#pid').append(`<input type="text" name="productid" id="proudct_id" class="form-control" value="${response.product_id}">`);
                     
-                  var hangoutButton = document.getElementById("p");
-                      hangoutButton.click(); // this will trigger the click event
+                //   var hangoutButton = document.getElementById("p");
+                //       hangoutButton.click(); // this will trigger the click event
 
                     console.log(response);
                     // console.log(response.product_id);
@@ -369,7 +374,7 @@
                     $('#prouduct_id').html('');
                     $('#pid').html('');
                     
-                    window.location.href="/admin/product";
+                    // window.location.href="/admin/product";
                 },
                 error:function(e){
                     var error = e.responseJSON.errors;

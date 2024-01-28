@@ -134,6 +134,9 @@ Route::prefix('admin')->middleware(['auth','is_admin'])->group(function(){
     Route::get('/product-sub-category',[ProductController::class,'productSubCategory']);
     Route::post('/create-Productzone',[ProductController::class,'createProductzone']);
     Route::get('/product-edit/{id}',[ProductController::class,'productEdit'])->name('product.edit');
+    Route::post('/product-update',[ProductController::class,'update']);
+    
+
 
 
 

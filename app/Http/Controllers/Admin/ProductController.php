@@ -12,6 +12,7 @@ use App\Models\ProductImage;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
 use DataTables;
 
 class ProductController extends Controller
@@ -148,6 +149,7 @@ class ProductController extends Controller
             // die;
 
             $data=[];
+            $data['productImage'] = ProductImage::where('product_id',$id)->get();
             $categories = Category::select('id','name')->orderBy('name','ASC')->get();
             $brand = Brand::select('id','name')->orderBy('name','ASC')->get();
             $sub_categories = SubCategory::select('id','name')->orderBy('name','ASC')->get();
@@ -157,6 +159,8 @@ class ProductController extends Controller
             $data['SubCategories'] = $sub_categories;
             $data['subCategories_edit'] =  $subCategories_edit;
            
+            // print_r($data['productImage']);
+            // die;
            return view('admin.product.product_edit',$data,compact('product'));
         }
 
@@ -164,9 +168,10 @@ class ProductController extends Controller
         {
 
             $product_id = $request->product_id;
-            $ddd = $request->all();
+            
 
-            $product = Product::find($product_id);
+           //$product = Product::find($product_id);
+            $product = new Product;
             $product->barcode         = $request->barcode;
             $product->brand_id        = $request->brand;
             $product->category_id     = $request->category;
@@ -181,11 +186,58 @@ class ProductController extends Controller
             $product->sub_category_id = $request->sub_category;
             $product->title           = $request->title;
             $product->track_quantity  = $request->track_qty;
-            $product->update();
+            $product->update($product_id);
             
-            // return response()->json($product);
+            return response()->json($product);
 
-            return redirect()-route('product.edit');
+            // return redirect()-route('product.edit');
 
         }
-}
+
+        public function updateProductzone(Request $request){
+
+            $image_data ='';
+            $store_image = [];
+
+          
+            if($request->has('image')){
+                foreach ($request->image as $key => $images) {
+                    $imageName = time().'.'.$images->extension();
+                    $images->move(public_path('productimages'),$imageName);
+
+                    $store_image[] = $imageName;
+                }
+
+                foreach ($store_image as $key => $img) {
+
+                    // $image_path = public_path('productimages')."/".$img;  // Value is not URL but directory file path
+                    // if(File::exists($image_path)) {
+                    //     File::delete($image_path);
+                    // }
+
+                    // $product = ProductImage::find($request->proudctid);
+                    // $product = new  ProductImage;
+                    // $product->image = $img;
+                    // $product->update()->where('proudctid',$product);
+                    
+                    
+
+                        $image_data = ProductImage::updateOrCreate(
+                            [
+
+                                'product_id' => $request->proudctid,
+                            ],
+                            [
+                                'image' => $img
+                               
+                            ]);
+                    
+                }
+            
+        }
+            // $dd  = $request->all();
+        return response()->json(['image'=> $img]);
+        // return redirect('admin/product');
+
+}}
+

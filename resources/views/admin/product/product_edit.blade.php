@@ -53,21 +53,51 @@
                             </div>
                         </div>	                                                                      
                     </div>
-                    <div class="card mb-3">
-                        <div class="card-body" style="height:300px ">
+                    <div class="card mb-3" style="height:400px ">
+                        <div class="card-body" >
+                           
                             <h2 class="h4 mb-3">Media</h2>								
-                            <div id="image" name="image" class="dropzone dz-clickable">
-                                <div class="dz-message needsclick text-center">    
+                            <div id="image" name="image" class="dropzone dz-clickable" >
+                                <div class="dz-message needsclick text-center" >    
                                     <br>Drop files here or click to upload.<br><br>                                            
                                 </div>
                             </div>
                             <p id="image_eror" class="text-danger"> </p> 
+
                         </div>	                                                                      
                     </div>
+
+                    <div class="card mb-3" style="height:400px ">
+                        <div class="card-body">
+                           
+                            <table>
+                                <tr>
+                                    @if(!empty($productImage))
+                                        @foreach ($productImage as $item)
+                                        <td>
+                                            <div class="card" style="height:150px; width:200px;margin:5px">
+                                                <div >
+                                                    <img src="{{asset('productimages/'.$item->image)}}" style="height:150px; width:200px;margin:5px">
+                                                    <input type="hidden"  name="productid" value="{{$item->product_id}}">
+                                                </div>
+                                            </div>
+                                        </td>
+                                        @endforeach
+                                    @endif
+                                </tr>
+                            </table>
+                           
+
+                        </div>	                                                                      
+                    </div>
+
+
+                
+                          	                                                                      
                     
                     <div class="card mb-3">
                         <div class="card-body">
-                            <input type="text" value="{{$product->id}}" name="product_id">							
+                            <input type="text" value="{{$product->id}}" name="pr_id" id="pr_id">							
                             <h2 class="h4 mb-3">Pricing</h2>	
                             <div class="row">
                                 <div class="col-md-12">
@@ -195,7 +225,7 @@
                     </div>                                 
                 </div>
             </div>
-            {{-- <div id="p"></div> --}}
+            <div id="p"></div>
             
             <div class="pb-5 pt-3">
                 <button type="button" id="productbtn" class="btn btn-primary">Update</button>
@@ -220,70 +250,69 @@
     Dropzone.autoDiscover = false;    
 
     $(document).ready(function(){
-
-
           
     /*------------------------------------------
      --------------------------------------------
      Pass Header Token
      --------------------------------------------
      --------------------------------------------*/ 
-    $.ajaxSetup({
-          headers: {
-              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          }
-    });
+    // $.ajaxSetup({
+    //       headers: {
+    //           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //       }
+    // });
       
          
 
-    // var currentFile = null;
-    //  const dropzone = $("#image").dropzone({ 
-    //         url:  "{{url('admin/create-Productzone')}}",
-    //         maxFiles: 10, 
-    //         addRemoveLinks: true,
-    //         autoProcessQueue: false,
-    //         acceptedFiles: "image/jpeg,image/png,image/gif",
-    //         paramName: "image", 
-    //         uploadMultiple: true,
-    //         parallelUploads: 10,
-    //         // maxFilesize: 2, // MB
-    //         headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-    //         //  success:function(response){
-    //         //       console.log(response);
-    //         //      }
-    //         init: function() {
+  
+    var currentFile = null;
+     const dropzone = $("#image").dropzone({ 
+            url:  "{{url('admin/update-Productzone')}}",
+            maxFiles: 10, 
+            addRemoveLinks: true,
+            autoProcessQueue: false,
+            acceptedFiles: "image/jpeg,image/png,image/gif",
+            paramName: "image", 
+            uploadMultiple: true,
+            parallelUploads: 10,
+            // maxFilesize: 2, // MB
+            headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+             success:function(response){
+                  console.log(response);
+                 },
+            init: function() {
                 
-    //             var myDropzone = this;
+                var myDropzone = this;
        
-    //             $("#p").click(function (e) {
-    //                 // alert(12);
-    //                 // return;
-    //                 e.preventDefault();
-    //                 myDropzone.processQueue();
+                $("#p").click(function (e) {
+                    // alert(12);
+                    // return;
+                    e.preventDefault();
+                    myDropzone.processQueue();
                   
-    //             });
+                });
 
                
                 
                   
-    //             this.on("sending", function (file, xhr, formData) {
-    //                 // Add custom data to the formData
-    //                 formData.append("proudctid", $("#proudct_id").val());
-    //                 // Add any other custom data you want to send
-    //             });
-    //             this.on("processing", function() {
-    //                 this.options.autoProcessQueue = true;
-    //             });
+                this.on("sending", function (file, xhr, formData) {
+                    // Add custom data to the formData
+                    formData.append("proudctid", $("#pr_id").val());
+                    // Add any other custom data you want to send
+                });
+                this.on("processing", function() {
+                    this.options.autoProcessQueue = true;
+                });
 
 
-    //             this.on("success", function(file, response) {
-    //             //   myDropzone.removeFile(file);
-    //                  myDropzone.removeAllFiles(true);
-    //             });
+                this.on("success", function(file, response) {
+                //   myDropzone.removeFile(file);
+                     myDropzone.removeAllFiles(true);
+                });
             
                 
-    //              }
-    //         });
+                 }
+            });
 
 
         $('.summernote').summernote({
@@ -355,10 +384,10 @@
                 success:function(response){
                     // alert("kokok");
                     // $('#proudct_id').val(response.proudct_id);
-                    // $('#pid').append(`<input type="text" name="productid" id="proudct_id" class="form-control" value="${response.product_id}">`);
+                     $('#pid').append(`<input type="text" name="productid" id="proudct_id" class="form-control" value="${response.product_id}">`);
                     
-                //   var hangoutButton = document.getElementById("p");
-                //       hangoutButton.click(); // this will trigger the click event
+                  var hangoutButton = document.getElementById("p");
+                      hangoutButton.click(); // this will trigger the click event
 
                     console.log(response);
                     // console.log(response.product_id);
@@ -374,7 +403,7 @@
                     $('#prouduct_id').html('');
                     $('#pid').html('');
                     
-                    // window.location.href="/admin/product";
+                    window.location.href="/admin/product";
                 },
                 error:function(e){
                     var error = e.responseJSON.errors;

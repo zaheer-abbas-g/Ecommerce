@@ -5,6 +5,9 @@
 	<!-- Content Header (Page header) -->
     <section class="content-header">					
         <div class="container-fluid my-2">
+            <?php if(session()->has('message')): ?>
+            <p class="alert alert-success text-center" > <?php echo e(session()->get('message')); ?></p>
+            <?php endif; ?>
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1>Products</h1>

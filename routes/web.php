@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\FrontController;
 use App\Http\Controllers\SubCategoryController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +23,7 @@ use Illuminate\Support\Facades\Route;
 //     return view('user.home');
 // });
 
+Route::get("/",[FrontController::class,"index"])->name('front.home');
 // Route::get('/user-register', function () {
 //     return view('user.register');
 // });
@@ -136,7 +138,8 @@ Route::prefix('admin')->middleware(['auth','is_admin'])->group(function(){
     Route::get('/product-edit/{id}',[ProductController::class,'productEdit'])->name('product.edit');
     Route::post('/product-update',[ProductController::class,'update']);
     Route::post('/update-Productzone',[ProductController::class,'updateProductzone']);
-    
+    Route::get('/product-delete/{id}',[ProductController::class,'productDelete'])->name('product.delete');
+
 
 
   

@@ -234,7 +234,7 @@
     var currentFile = null;
      const dropzone = $("#image").dropzone({ 
             url:  "<?php echo e(url('admin/create-Productzone')); ?>",
-            maxFiles: 10, 
+            maxFiles: 1, 
             addRemoveLinks: true,
             autoProcessQueue: false,
             acceptedFiles: "image/jpeg,image/png,image/gif",
@@ -349,6 +349,13 @@
                 processData:false,
                 contentType:false,
                 success:function(response){
+                    Swal.fire({
+                            position: "top-end",
+                            icon: "success",
+                            title: response.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                         });
                     // $('#proudct_id').val(response.proudct_id);
                     $('#pid').append(`<input type="text" name="productid" id="proudct_id" class="form-control" value="${response.product_id}">`);
                     
@@ -369,7 +376,7 @@
                     $('#prouduct_id').html('');
                     $('#pid').html('');
                     
-                    window.location.href="/admin/product";
+                     window.location.href="/admin/product";
                 },
                 error:function(e){
                     var error = e.responseJSON.errors;

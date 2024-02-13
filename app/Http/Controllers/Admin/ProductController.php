@@ -29,7 +29,7 @@ class ProductController extends Controller
 
                             $btn = '<a href="'.route('product.edit',$row->id).'" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="btn-sm editProduct"><i class="fas fa-edit" style="font-size:36px;color:success"></i></a>';
 
-                            $btn = $btn.'<a href="javascript:void(0)"  data-toggle="tooltip"  data-id="'.$row->id.'"  data-original-title="Delete"   class="btn-sm deleteProduct"><i class="far fa-trash-alt" style="font-size:36px;color:red"></i></a>';
+                            $btn = $btn.'<a href="'.route('product.delete',$row->id).'"  data-toggle="tooltip"  data-id="'.$row->id.'"  data-original-title="Delete"   class="btn-sm deleteProduct"><i class="far fa-trash-alt" style="font-size:36px;color:red"></i></a>';
                             return $btn;
                         })
                     ->addColumn('price',function($product){
@@ -104,7 +104,7 @@ class ProductController extends Controller
             $product->status          = $request->status;
             $product->save();                                                                     
 
-        return response()->json(['data' => $product,'product_id'=> $product->id]);
+        return response()->json(['data' => $product,'product_id'=> $product->id,'message' => 'data successfully added']);
     }
 
     public function productSubCategory(Request $request){
@@ -167,10 +167,10 @@ class ProductController extends Controller
         public function update(Request $request)
         {
 
-            $product_id = $request->product_id;
+            $id = $request->product_id;
             
 
-           //$product = Product::find($product_id);
+           $product = Product::find($id);
             $product = new Product;
             $product->barcode         = $request->barcode;
             $product->brand_id        = $request->brand;
@@ -186,9 +186,9 @@ class ProductController extends Controller
             $product->sub_category_id = $request->sub_category;
             $product->title           = $request->title;
             $product->track_quantity  = $request->track_qty;
-            $product->update($product_id);
+            $product->update();
             
-            return response()->json($product);
+            return response()->json([$product,'message' => 'data successfully added']);
 
             // return redirect()-route('product.edit');
 
@@ -232,12 +232,24 @@ class ProductController extends Controller
                                
                             ]);
                     
-                }
+                        }
             
-        }
-            // $dd  = $request->all();
-        return response()->json(['image'=> $img]);
-        // return redirect('admin/product');
+                     }
+                 $dd  = $request->all();
+                return response()->json(['image'=> $img]);
+                return redirect('admin/product');
 
-}}
+     }
+
+
+            public function productDelete($id){
+
+               $product = Product::find($id);
+               
+                // $product->delete();
+                return redirect('admin/product')->with('message',"Data deleted successfully");
+            }   
+
+
+}
 

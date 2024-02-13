@@ -69,9 +69,9 @@
                         </div>
                         <span id="status_error" class="text-danger"> </span>
                         
-                        <div class="mb-3"> 
+                        {{-- <div class="mb-3"> 
                             <input type="text" id="category_id" name="category_id">
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
                     	

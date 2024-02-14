@@ -14,13 +14,20 @@ class CategoryController extends Controller
 
     public function index(){
 
-            $category = Category::get();
+            $category = Category::select('id','name','slug','status','show_home','image')
+            ->orderBy('id','desc')
+            ->orderBy('name','desc')
+            ->get();
             return response()->json($category);
 
     }
     
     public function store(CategoryRequest $request){
 
+        // print_r($request->showHome); die;
+        // return response()->json($request->showHome); 
+
+        // die;
         if($request->hasFile('input1')){
             $imageName = time().".".$request->input1->extension();
             $request->input1->move(public_path('images'),$imageName);
@@ -33,7 +40,8 @@ class CategoryController extends Controller
                     'name'      => $request->name,
                     'slug'      => $request->slug,
                     'image'     => $imageName,
-                    'status'    => $request->status
+                    'status'    => $request->status,
+                    'show_home' => $request->showHome
                 ]
             );
         }

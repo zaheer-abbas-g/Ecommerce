@@ -52,6 +52,17 @@
                         </div>
                         <span id="status_error" class="text-danger"> </span>
                     </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="email">Show on Home</label>
+                                <select name="showHome" id="showHome" class="form-control">
+                                    <option value="" disabled selected>Select</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                        </div>
+                        <span id="status_error" class="text-danger"> </span>
+                    </div>
                 </div>
 
                 <div class="row">
@@ -122,6 +133,7 @@
                             <th>Slug</th>
                             <th>status</th>
                             <th>image</th>
+                            <th>show home</th>
                             <th>Action</th>
                             
                         </tr>
@@ -167,7 +179,7 @@ $(document).ready(function(){
                     $.each(response,function(key,value){
                         t.row.add([value.id,value.name,value.slug,
                         `<span>${(value.status==true)?"<p class='btn btn-success btn-sm' style='width:80px; height:30px'>active</p>":"<p class='btn btn-warning btn-sm' style='width:80px; height:30px'>block </p>"}</span>`,
-                            `<img src='/images/${value.image}'  width="70px" height="80px"/>`,
+                            `<img src='/images/${value.image}'  width="70px" height="80px"/>`,value.show_home,
                              `<td><a href="javascript:void(0);" class="editRecord" data-id="${value.id}">
                                 <i class="fas fa-edit" style="font-size:36px;color:success"></i> 
                             </a></td> &nbsp`+

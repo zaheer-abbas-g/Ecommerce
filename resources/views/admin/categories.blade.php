@@ -80,9 +80,9 @@
                         </div>
                         <span id="status_error" class="text-danger"> </span>
                         
-                        {{-- <div class="mb-3"> 
-                            <input type="text" id="category_id" name="category_id">
-                        </div> --}}
+                        <div class="mb-3"> 
+                            <input type="hidden" id="category_id" name="category_id">
+                        </div>
                     </div>
                 </div>
                     	
@@ -279,6 +279,7 @@ $(document).ready(function(){
                              $("#name").val(response.name);
                              $('#slug').val(response.slug);
                              $('#status').val(response.status);
+                             $('#showHome').val(response.show_home);
                             //  $("imagepreview1").attr("src","");
                              $("#imagepreview1").attr("src","/images/"+response.image);
                              $(window).scrollTop(0);

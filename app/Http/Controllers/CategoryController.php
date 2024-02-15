@@ -15,8 +15,6 @@ class CategoryController extends Controller
     public function index(){
 
             $category = Category::select('id','name','slug','status','show_home','image')
-            ->orderBy('id','desc')
-            ->orderBy('name','desc')
             ->get();
             return response()->json($category);
 
@@ -25,13 +23,14 @@ class CategoryController extends Controller
     public function store(CategoryRequest $request){
 
         // print_r($request->showHome); die;
-        // return response()->json($request->showHome); 
+        // return response()->json($request->category_id); 
 
         // die;
+        $imageName = '';
         if($request->hasFile('input1')){
             $imageName = time().".".$request->input1->extension();
             $request->input1->move(public_path('images'),$imageName);
-            
+        }
             $save_data =  Category::updateOrCreate(
                 [
                 'id' => $request->category_id
@@ -44,7 +43,7 @@ class CategoryController extends Controller
                     'show_home' => $request->showHome
                 ]
             );
-        }
+       
             return response()->json(['status'=> 'true','message'=> 'succefully added',"data"=> $save_data ]);
     }
 

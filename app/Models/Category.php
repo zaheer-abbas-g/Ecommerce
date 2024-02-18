@@ -14,8 +14,4 @@ class Category extends Model
         return $this->hasMany(SubCategory::class,'category_id','id');
     }
 
-
-    // public function scopeSort($query, array $params = []) {
-    //     return $query->orderBy('id')->orderBy('id','desc');
-    // }
 }

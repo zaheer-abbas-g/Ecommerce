@@ -66,12 +66,24 @@
                                     <option value="0">Block</option>
                                 </select>
                             </div>
-                        </div>									
+                        </div>	
+                        
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label for="status">Show on Home</label>
+                                <select name="showhome" id="showhome" class="form-control">
+                                    <option selected disabled>select</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary" id="subbtn">Save</button>
                     </div>
+                    
                 </form>	
                 </div>
            
@@ -98,6 +110,7 @@
                                 <th>Slug</th>
                                 <th>Category</th>
                                 <th>Status</th>
+                                <th>Showhome</th>
                                 <th width="280px">Action</th>
                             </tr>
                         </thead>
@@ -118,6 +131,7 @@
             //// show category function call //////
             $("#exampleModalLong").on('hidden.bs.modal', function () {
                 $('#select_category').val("").trigger("change");    
+                $('#showhome').val("").trigger("change");    
                 $('#exampleModalLongTitle').html('Create sub category');
                 $('#subbtn').html('Save');
                 $('#name').val('');
@@ -209,6 +223,7 @@
                 {data: 'slug', name: 'slug'},
                 {data: 'categories', name: 'Category'},
                 {data: 'status', name: 'status'},
+                {data: 'showhome', name: 'showhome'},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
             ]
         });
@@ -232,6 +247,7 @@
                         $('#name').val(value.name);
                         $('#slug').val(value.slug);
                         $('#status').val(value.status).trigger('change');
+                        $('#showhome').val(value.showhome).trigger('change');
                     });
                     }
                 });

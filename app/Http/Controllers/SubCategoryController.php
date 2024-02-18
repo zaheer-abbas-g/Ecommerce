@@ -17,7 +17,7 @@ class SubCategoryController extends Controller
     if ($request->ajax()) {
   
       $data = SubCategory::with('Categories:id,name')
-                          ->select('id','name','slug','status','category_id')
+                          ->select('id','name','slug','status','category_id','showhome')
                           ->latest()->get();
           return DataTables::of($data)
               ->addIndexColumn()
@@ -56,7 +56,8 @@ class SubCategoryController extends Controller
                 'category_id' => $request->select_category,
                 'name'=>  $request->name,
                 'slug'  => $request->slug,
-                'status'=> $request->status
+                'status'=> $request->status,
+                'showhome' => $request->showhome 
             ]);
       
         return response()->json(['message' => "Sub Category successfully added","data" => $updateOrCreate]);

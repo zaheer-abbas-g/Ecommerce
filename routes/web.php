@@ -3,7 +3,8 @@
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\FrontController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Front\FrontController;
 use App\Http\Controllers\SubCategoryController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;

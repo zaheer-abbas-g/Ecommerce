@@ -5,6 +5,7 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Front\FrontController;
+use App\Http\Controllers\Front\ShopController;
 use App\Http\Controllers\SubCategoryController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -140,17 +141,19 @@ Route::prefix('admin')->middleware(['auth','is_admin'])->group(function(){
     Route::post('/product-update',[ProductController::class,'update']);
     Route::post('/update-Productzone',[ProductController::class,'updateProductzone']);
     Route::get('/product-delete/{id}',[ProductController::class,'productDelete'])->name('product.delete');
-
-
-
-  
-
-
-
-    
     
     
 
 });
 
 
+  
+///////////////  Fonend Routes //////////////////
+
+
+//////////////// Shop Page ////////////////
+
+Route::get('/shop',[ShopController::class,'index'])->name('front.shop');
+
+
+    

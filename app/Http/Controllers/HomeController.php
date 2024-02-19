@@ -30,6 +30,6 @@ class HomeController extends Controller
         $categories =  Category::select('name')
                         ->orderBy('name','desc')
                         ->get();
-                return view('user.home',compact('categories'));
+                return view('user.home',compact('categoris'));
     }
 }

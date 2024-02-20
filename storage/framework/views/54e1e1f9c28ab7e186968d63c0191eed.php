@@ -47,7 +47,7 @@
                                     <div class="accordion-body">
                                         <div class="navbar-nav">
                                             <?php $__currentLoopData = $item->subCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                 <a href="<?php echo e(route('front.shop',[$item->id,$value->id])); ?>" class="nav-item nav-link"><?php echo e($value->name); ?></a>
+                                                 <a href="<?php echo e(route('front.shop',[$item->slug,$value->slug])); ?>" class="nav-item nav-link"><?php echo e($value->name); ?></a>
                                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>                                   
                                         </div>
                                     </div>

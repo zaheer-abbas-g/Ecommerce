@@ -46,7 +46,7 @@
                                     <div class="accordion-body">
                                         <div class="navbar-nav">
                                             @foreach ($item->subCategories as $value)
-                                                 <a href="{{route('front.shop',[$item->id,$value->id])}}" class="nav-item nav-link">{{$value->name}}</a>
+                                                 <a href="{{route('front.shop',[$item->slug,$value->slug])}}" class="nav-item nav-link">{{$value->name}}</a>
                                             @endforeach                                   
                                         </div>
                                     </div>

@@ -123,6 +123,8 @@
             </div>
 
          @endforeach
+         @else
+                  {{"Category not Found"}}
          @endif
        
 

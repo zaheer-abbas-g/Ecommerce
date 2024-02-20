@@ -153,7 +153,7 @@ Route::prefix('admin')->middleware(['auth','is_admin'])->group(function(){
 
 //////////////// Shop Page ////////////////
 
-Route::get('/shop',[ShopController::class,'index'])->name('front.shop');
+Route::get('/shop/{categorySlug?}/{subCategorySlug?}',[ShopController::class,'index'])->name('front.shop');
 
 
     

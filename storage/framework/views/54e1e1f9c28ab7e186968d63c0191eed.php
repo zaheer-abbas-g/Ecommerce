@@ -38,7 +38,7 @@
                                         </button>
                                     </h2>  
                             <?php else: ?>
-                                <a href="#" class="nav-item nav-link"><?php echo e($item->name); ?></a>
+                                <a href="<?php echo e(route('front.shop',$item->slug)); ?>" class="nav-item nav-link"><?php echo e($item->name); ?></a>
                             <?php endif; ?>
                             
                             
@@ -47,7 +47,7 @@
                                     <div class="accordion-body">
                                         <div class="navbar-nav">
                                             <?php $__currentLoopData = $item->subCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                 <a href="#" class="nav-item nav-link"><?php echo e($value->name); ?></a>
+                                                 <a href="<?php echo e(route('front.shop',[$item->id,$value->id])); ?>" class="nav-item nav-link"><?php echo e($value->name); ?></a>
                                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>                                   
                                         </div>
                                     </div>
@@ -144,7 +144,6 @@
                             <?php $__currentLoopData = $shop['products']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>     
                             <div class="col-md-4">
                                 <div class="card product-card">
-        
                                     <div class="product-image position-relative">
                                         <?php if($shop['products']->isNotEmpty()): ?>
                                                 <?php $__currentLoopData = $product->product_images; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product_image): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>   

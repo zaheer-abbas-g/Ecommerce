@@ -121,6 +121,9 @@
             </div>
 
          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+         <?php else: ?>
+                  <?php echo e("Category not Found"); ?>
+
          <?php endif; ?>
        
 

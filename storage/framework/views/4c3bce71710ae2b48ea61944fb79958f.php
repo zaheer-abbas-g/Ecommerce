@@ -235,7 +235,7 @@
             maxFiles: 1, 
             addRemoveLinks: true,
             autoProcessQueue: false,
-            acceptedFiles: "image/jpeg,image/png,image/gif",
+            acceptedFiles: "image/jpeg,image/png,image/gif,image/webp",
             paramName: "image", 
             uploadMultiple: true,
             parallelUploads: 10,

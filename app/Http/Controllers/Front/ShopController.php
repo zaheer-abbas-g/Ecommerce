@@ -13,34 +13,36 @@ class ShopController extends Controller
 {
     public function index(Request $request, $categorySlug=null,$subCategorySlug=null){
 
-     
         $shop['categories'] = Category::where('status',1)->orderBy('name','ASC')->get();
 
         $shop['brands'] = Brand::where('status',1)->orderBy('name','ASC')->get();
 
         // print_r($categorySlug);die;
         
-
+        $categorySelected = '';
+        $subCategorySelected = '';
         ///// Apply filters here
-
 
         $shop['products'] = Product::with('product_images') 
                             ->where('status',1);
 
                             if(!empty($categorySlug)){
-                                $category_id = Category::where('slug',$categorySlug)->first();
-                                $shop['products'] = $shop['products']->where('category_id',$category_id->id); 
+                                $category = Category::where('slug',$categorySlug)->first();
+                                $shop['products'] = $shop['products']->where('category_id',$category->id); 
+                                $categorySelected = $category->id;
                             }
 
                             if(!empty($subCategorySlug)){
-                                $category_id = SubCategory::where('slug',$subCategorySlug)->first();
-                                $shop['products'] = $shop['products']->where('sub_category_id',$category_id->id);
+                                $subcategory = SubCategory::where('slug',$subCategorySlug)->first();
+                                $shop['products'] = $shop['products']->where('sub_category_id',$subcategory->id);
+                                $subCategorySelected =  $subcategory->id;
                             }
 
 
         $shop['products'] =  $shop['products']
                             ->orderBy('id','DESC')->get();
-
-        return view('front.shop',['shop'=> $shop]);
+      
+        // dd(   $shop['products'] );
+        return view('front.shop',['shop'=> $shop,'categorySelected'=> $categorySelected,'subCategorySelected'=> $subCategorySelected]);
     }
 }

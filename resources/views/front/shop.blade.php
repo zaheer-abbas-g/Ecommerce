@@ -24,17 +24,19 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="accordion accordion-flush" id="accordionExample">
-                            {{-- @dd($shop['categories']) --}}
+                            {{-- @dd($categorySelected); --}}
                             @if ($shop['categories']->isNotEmpty())
                             @foreach ($shop['categories'] as $key=>$item)
+                            {{-- @dd($item->id); --}}
+                               
                             <div class="accordion-item">
 
                             @if($item->subCategories->isNotEmpty())
 
-                                    <h2 class="accordion-header" id="headingOne">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne-{{$key}}" aria-expanded="false" aria-controls="collapseOne-{{$key}}">
-                                            {{$item->name}}
-                                        </button>
+                            <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button collapsed {{ ($item->id == $categorySelected) ? 'text-primary' : " " }}" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne-{{$key}}" aria-expanded="false" aria-controls="collapseOne-{{$key}}">
+                                {{$item->name}}
+                            </button>
                                     </h2>  
                             @else
                                 <a href="{{route('front.shop',$item->slug)}}" class="nav-item nav-link">{{$item->name}}</a>
@@ -42,11 +44,11 @@
                             
                             
                             @if($item->subCategories->isNotEmpty())
-                                <div id="collapseOne-{{$key}}" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample" style="">
+                                <div id="collapseOne-{{$key}}" class="accordion-collapse collapse {{ ($categorySelected == $item->id) ? 'show':'' }}" aria-labelledby="headingOne" data-bs-parent="#accordionExample" style="">
                                     <div class="accordion-body">
                                         <div class="navbar-nav">
                                             @foreach ($item->subCategories as $value)
-                                                 <a href="{{route('front.shop',[$item->slug,$value->slug])}}" class="nav-item nav-link">{{$value->name}}</a>
+                                                 <a href="{{route('front.shop',[$item->slug,$value->slug])}}" class="nav-item nav-link {{ ($subCategorySelected == $value->id) ? 'text-primary':' ' }}">{{$value->name}}</a>
                                             @endforeach                                   
                                         </div>
                                     </div>

@@ -27,15 +27,17 @@
                             
                             <?php if($shop['categories']->isNotEmpty()): ?>
                             <?php $__currentLoopData = $shop['categories']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            
+                               
                             <div class="accordion-item">
 
                             <?php if($item->subCategories->isNotEmpty()): ?>
 
-                                    <h2 class="accordion-header" id="headingOne">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne-<?php echo e($key); ?>" aria-expanded="false" aria-controls="collapseOne-<?php echo e($key); ?>">
-                                            <?php echo e($item->name); ?>
+                            <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button collapsed <?php echo e(($item->id == $categorySelected) ? 'text-primary' : " "); ?>" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne-<?php echo e($key); ?>" aria-expanded="false" aria-controls="collapseOne-<?php echo e($key); ?>">
+                                <?php echo e($item->name); ?>
 
-                                        </button>
+                            </button>
                                     </h2>  
                             <?php else: ?>
                                 <a href="<?php echo e(route('front.shop',$item->slug)); ?>" class="nav-item nav-link"><?php echo e($item->name); ?></a>
@@ -43,11 +45,11 @@
                             
                             
                             <?php if($item->subCategories->isNotEmpty()): ?>
-                                <div id="collapseOne-<?php echo e($key); ?>" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample" style="">
+                                <div id="collapseOne-<?php echo e($key); ?>" class="accordion-collapse collapse <?php echo e(($categorySelected == $item->id) ? 'show':''); ?>" aria-labelledby="headingOne" data-bs-parent="#accordionExample" style="">
                                     <div class="accordion-body">
                                         <div class="navbar-nav">
                                             <?php $__currentLoopData = $item->subCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                 <a href="<?php echo e(route('front.shop',[$item->slug,$value->slug])); ?>" class="nav-item nav-link"><?php echo e($value->name); ?></a>
+                                                 <a href="<?php echo e(route('front.shop',[$item->slug,$value->slug])); ?>" class="nav-item nav-link <?php echo e(($subCategorySelected == $value->id) ? 'text-primary':' '); ?>"><?php echo e($value->name); ?></a>
                                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>                                   
                                         </div>
                                     </div>

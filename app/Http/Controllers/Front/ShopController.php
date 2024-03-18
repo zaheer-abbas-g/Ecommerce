@@ -14,13 +14,17 @@ class ShopController extends Controller
     public function index(Request $request, $categorySlug=null,$subCategorySlug=null){
 
         $shop['categories'] = Category::where('status',1)->orderBy('name','ASC')->get();
-
+            // dd( $shop['categories']);
         $shop['brands'] = Brand::where('status',1)->orderBy('name','ASC')->get();
 
         // print_r($categorySlug);die;
         
         $categorySelected = '';
         $subCategorySelected = '';
+        $brandsArray = [];
+        $sort = '';
+        $brandsArray = $request->get('brand');
+
         ///// Apply filters here
 
         $shop['products'] = Product::with('product_images') 
@@ -38,11 +42,54 @@ class ShopController extends Controller
                                 $subCategorySelected =  $subcategory->id;
                             }
 
+                                                
+                            if(!empty($brandsArray)){
 
-        $shop['products'] =  $shop['products']
-                            ->orderBy('id','DESC')->get();
+                                $brandsArray = explode(',',$brandsArray);
+                                $shop['products'] =  $shop['products']->whereIn('brand_id',$brandsArray);
+                            }
+
+                            // if($request->get('price_max') !='' && $request->get('price_min') !=''){
+                            //     $shop['products'] =  $shop['products']->whereBetween('price',[$request->get('price_max'),$request->get('price_min')]);
+
+                            // }
+                                    // dd($request->get('sort'));
+                            if($request->get('sort') != ''){
+
+                                    if($request->get('sort') == 'latest'){
+                                            $shop['products'] =  $shop['products']->orderBy('id','desc');  
+                                    }
+                                    else if($request->get('sort') == 'price_asc'){
+                                        $shop['products'] =  $shop['products']->orderBy('id','asc');  
+                                    }
+                                    else{
+                                        $shop['products'] =  $shop['products']->orderBy('id','desc');  
+                                    }
+                            }
+                            else{
+                                        
+                                     $shop['products'] =  $shop['products']->orderBy('id','desc'); 
+                            }
+
+                          $sort = $request->get('sort');
+                            $shop['products'] =  $shop['products']
+                                                ->orderBy('id','DESC')
+                                                ->get();
       
-        // dd(   $shop['products'] );
-        return view('front.shop',['shop'=> $shop,'categorySelected'=> $categorySelected,'subCategorySelected'=> $subCategorySelected]);
+    
+        return view('front.shop',['shop'=> $shop,'categorySelected'=> $categorySelected,
+        'subCategorySelected'=> $subCategorySelected,'brandsarray' => $brandsArray],compact('sort'));
+    } 
+
+    public function product($slug){
+
+
+        $product =  Product::where('slug',$slug)->with('product_images')->first();
+
+        if($product == null){
+            abort(404);
+        }
+
+        return view('front.product',compact('product'));
     }
 }

@@ -167,11 +167,12 @@ class ProductController extends Controller
         public function update(Request $request)
         {
 
-            $id = $request->product_id;
-            
-
-           $product = Product::find($id);
-            $product = new Product;
+            $id = $request->pr_id;
+          
+            if(!empty($id)){
+                $product = Product::find($id);
+            }
+            // $product = new Product;
             $product->barcode         = $request->barcode;
             $product->brand_id        = $request->brand;
             $product->category_id     = $request->category;
@@ -186,6 +187,8 @@ class ProductController extends Controller
             $product->sub_category_id = $request->sub_category;
             $product->title           = $request->title;
             $product->track_quantity  = $request->track_qty;
+            $product->short_description  = $request->short_description;
+            $product->shipping_returns  = $request->shipping_return;
             $product->update();
             
             return response()->json([$product,'message' => 'data successfully added']);
@@ -235,7 +238,7 @@ class ProductController extends Controller
                         }
             
                      }
-                 $dd  = $request->all();
+                
                 return response()->json(['image'=> $img]);
                 return redirect('admin/product');
 
@@ -249,6 +252,22 @@ class ProductController extends Controller
                 // $product->delete();
                 return redirect('admin/product')->with('message',"Data deleted successfully");
             }   
+            
+            public function getProducts(Request $request){
+
+                if($request->term !=""){
+                    $products = Product::where('name','like','%'.$request->term."%")->get();
+                    if($products != ""){
+                        foreach ($products as $key => $prod) {
+                            $tempPoduct[] = array('id'=> $prod->id,'text'=> $prod->title);
+                        }
+                    }
+                }
+                return response()->json([
+                    'text' =>  $tempPoduct,
+                    'status' => true
+                ]);
+            }
 
 
 }

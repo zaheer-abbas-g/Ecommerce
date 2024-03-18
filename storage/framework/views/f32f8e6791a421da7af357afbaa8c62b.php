@@ -34,7 +34,8 @@
 	<link rel="stylesheet" type="text/css" href="<?php echo e(asset('front_assets/css/slick.css')); ?>"  />
 	<link rel="stylesheet" type="text/css" href="<?php echo e(asset('front_assets/css/slick-theme.css')); ?>" />
     <link rel="stylesheet" type="text/css" href="<?php echo e(asset('front_assets/css/style.css ')); ?>" />
-
+    <link rel="stylesheet" type="text/css" href="<?php echo e(asset('front_assets/css/ion.rangeSlider.min.css')); ?>" />
+	
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -82,17 +83,22 @@
     		</button>
     		<div class="collapse navbar-collapse" id="navbarSupportedContent">
       			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+				
         		    <?php if((getCategories()->isNotEmpty())): ?>
                     <?php $__currentLoopData = getCategories(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+					
                     <li class="nav-item dropdown">
                             <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                 <?php echo e($category->name); ?>
 
                             </button>
+					
                             <?php if(!empty($category->subCategories)): ?>    
                             <ul class="dropdown-menu dropdown-menu-dark">
                                 <?php $__currentLoopData = $category->subCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$cate): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <li><a class="dropdown-item nav-link" href="#"><?php echo e($cate->name); ?></a></li>
+								
+                                <li><a class="dropdown-item nav-link" href="#"><?php echo e(($cate->name)); ?></a></li>
+								
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </ul>
                             <?php endif; ?>
@@ -175,8 +181,13 @@
 <script src="<?php echo e(asset('front_assets/js/instantpages.5.1.0.min.js')); ?>"></script>
 <script src="<?php echo e(asset('front_assets/js/lazyload.17.6.0.min.js')); ?>"></script>
 <script src="<?php echo e(asset('front_assets/js/slick.min.js')); ?>"></script>
+<script src="<?php echo e(asset('front_assets/js/ion.rangeSlider.min.js')); ?>"></script>
 <script src="<?php echo e(asset('front_assets/js/custom.js')); ?>"></script>
+
+
+
 <script>
+
 window.onscroll = function() {myFunction()};
 
 var navbar = document.getElementById("navbar");
@@ -190,5 +201,8 @@ function myFunction() {
   }
 }
 </script>
+
+<?php echo $__env->yieldContent('customjs'); ?>
+
 </body>
 </html><?php /**PATH C:\xampp\htdocs\Ecommerce\resources\views/front/layouts/app.blade.php ENDPATH**/ ?>

@@ -141,6 +141,7 @@ Route::prefix('admin')->middleware(['auth','is_admin'])->group(function(){
     Route::post('/product-update',[ProductController::class,'update']);
     Route::post('/update-Productzone',[ProductController::class,'updateProductzone']);
     Route::get('/product-delete/{id}',[ProductController::class,'productDelete'])->name('product.delete');
+    Route::get('/get-product',[ProductController::class,'getProducts'])->name('get.products');
     
     
 
@@ -154,6 +155,6 @@ Route::prefix('admin')->middleware(['auth','is_admin'])->group(function(){
 //////////////// Shop Page ////////////////
 
 Route::get('/shop/{categorySlug?}/{subCategorySlug?}',[ShopController::class,'index'])->name('front.shop');
-
+Route::get('/slug/{slug}',[ShopController::class,'product'])->name('front.product');
 
     

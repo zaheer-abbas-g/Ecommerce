@@ -146,7 +146,7 @@
                     <div class="product-image position-relative">
                         @if ($product->product_images->isNotEmpty())
                             @foreach ($product->product_images as $value)
-                                <a href="" class="product-img"><img class="card-img-top" src="{{asset('/productimages/'.$value->image)}}" alt=""></a>
+                                <a href="{{route('front.product',$product->slug)}}" class="product-img"><img class="card-img-top" src="{{asset('/productimages/'.$value->image)}}" alt=""></a>
                             @endforeach
                         @endif
                         <a class="whishlist" href="222"><i class="far fa-heart"></i></a>                            

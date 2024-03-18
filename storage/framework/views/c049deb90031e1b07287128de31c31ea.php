@@ -145,7 +145,7 @@
                     <div class="product-image position-relative">
                         <?php if($product->product_images->isNotEmpty()): ?>
                             <?php $__currentLoopData = $product->product_images; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <a href="" class="product-img"><img class="card-img-top" src="<?php echo e(asset('/productimages/'.$value->image)); ?>" alt=""></a>
+                                <a href="<?php echo e(route('front.product',$product->slug)); ?>" class="product-img"><img class="card-img-top" src="<?php echo e(asset('/productimages/'.$value->image)); ?>" alt=""></a>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         <?php endif; ?>
                         <a class="whishlist" href="222"><i class="far fa-heart"></i></a>                            

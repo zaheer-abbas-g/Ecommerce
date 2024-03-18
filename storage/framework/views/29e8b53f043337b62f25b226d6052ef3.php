@@ -44,10 +44,25 @@
                                 </div>
                                 <div class="col-md-12">
                                     <div class="mb-3">
+                                        <label for="description">Short Description</label>
+                                        <textarea name="short_description" id="short_description" cols="30" rows="10" class="summernote" placeholder="short_description"><?php echo e($product->short_description); ?></textarea>
+                                    </div>
+                                </div> 
+
+                                <div class="col-md-12">
+                                    <div class="mb-3">
                                         <label for="description">Description</label>
                                         <textarea name="description" id="description" cols="30" rows="10" class="summernote" placeholder="Description"><?php echo e($product->description); ?></textarea>
                                     </div>
-                                </div>                                            
+                                </div> 
+
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label for="description">Shipping and Returns</label>
+                                        <textarea name="shipping_return" id="shipping_return" cols="30" rows="10" class="summernote" placeholder="shipping_return"><?php echo e($product->shipping_return); ?></textarea>
+                                    </div>
+                                </div> 
+                                                                           
                             </div>
                         </div>	                                                                      
                     </div>
@@ -95,7 +110,7 @@
                     
                     <div class="card mb-3">
                         <div class="card-body">
-                            <input type="text" value="<?php echo e($product->id); ?>" name="pr_id" id="pr_id">							
+                            <input type="hidden" value="<?php echo e($product->id); ?>" name="pr_id" id="pr_id">							
                             <h2 class="h4 mb-3">Pricing</h2>	
                             <div class="row">
                                 <div class="col-md-12">
@@ -183,7 +198,7 @@
                                     <option value="" selected disabled>select</option>
                                 <?php if(!empty($subCategories_edit)): ?>
                                     <?php $__currentLoopData = $subCategories_edit; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subCategories): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <option value="<?php echo e($subCategories->id); ?>" <?php echo e(($subCategories->id==$product->category_id)? 'selected':''); ?>><?php echo e($subCategories->name); ?></option>   
+                                    <option value="<?php echo e($subCategories->id); ?>" <?php echo e(($subCategories->id==$product->sub_category_id)? 'selected':''); ?>><?php echo e($subCategories->name); ?></option>   
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 <?php endif; ?> 
                                     </select>
@@ -220,7 +235,18 @@
                                 <p id="featured_eror" class="text-danger"> </p> 
                             </div>
                         </div>
-                    </div>                                 
+                    </div> 
+                    
+                    <div class="card mb-3">
+                        <div class="card-body">	
+                            <h2 class="h4 mb-3">Related products</h2>
+                            <div class="mb-3">
+                                <select multiple name="related_products[]" class="related_products w-100" id="related_products"> </select>
+                                <p id="featured_eror" class="text-danger"> </p> 
+                            </div>
+                        </div>
+                    </div> 
+
                 </div>
             </div>
             <div id="p"></div>
@@ -248,7 +274,8 @@
     Dropzone.autoDiscover = false;    
 
     $(document).ready(function(){
-          
+        
+   
     /*------------------------------------------
      --------------------------------------------
      Pass Header Token
@@ -316,6 +343,25 @@
         $('.summernote').summernote({
             height: '300px'
         });
+
+
+
+             
+        $('.related_products').select2({
+    ajax: {
+            url: '<?php echo e(route("get.products")); ?>',
+            dataType: 'json',
+            tags: true,
+            multiple: true,
+            minimumInputLength: 3,
+            processResults: function (data) {
+                return {
+                    results: data.tags
+                };
+            }
+        }
+    }); 
+
 
         ///////////// change slug /////////
         $('#title').on('change',function(){

@@ -8,7 +8,7 @@ use App\Models\Category;
 
    function getCategories(){
 
-   return  Category::with('subCategories:id,category_id,name')
+    return  Category::with('subCategories:id,category_id,name')
     ->where('show_home','Yes')  
     ->where('status',1) 
     ->orderBy('name','ASC')

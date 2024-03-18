@@ -21,6 +21,7 @@
 			
 		<link rel="stylesheet" href="<?php echo e(asset('admin_assets/dataTable/datatable.min.css')); ?>">
 		<link rel="stylesheet" href="<?php echo e(asset('fontawesome-free-5.15.4/css/all.min.css')); ?>"> 
+		<link rel="stylesheet" href="<?php echo e(asset('admin_assets/plugins/select2/css/select2.min.css')); ?>"> 
 
 		 <link rel="stylesheet" href="<?php echo e(asset('admin_assets/plugins/summernote/summernote-bs4.min.css')); ?>">
 		 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.0/min/dropzone.min.css">
@@ -186,6 +187,7 @@
 		<!-- Bootstrap 5 -->
 		<script src="<?php echo e(asset('admin_assets/dataTable/datatable.min.js')); ?>"></script>
 		<script src="<?php echo e(asset('admin_assets/dataTable/dataTables.bootstrap4.min.js')); ?>"></script>
+		<script src="<?php echo e(asset('admin_assets/plugins/select2/js/select2.min.js')); ?>"></script>
 
 	
 		<!-- AdminLTE App -->
